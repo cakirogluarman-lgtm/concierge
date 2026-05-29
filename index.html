@@ -1467,6 +1467,16 @@
       flex-wrap: wrap;
       gap: 16px;
     }
+    .admin-link {
+      display: inline-block;
+      margin-left: 6px;
+      opacity: 0.35;
+      transition: opacity .2s;
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+    .admin-link:hover { opacity: 0.85; }
     .footer-social {
       display: flex;
       gap: 12px;
@@ -3125,7 +3135,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <div>© 2026 The Yard Concierge. Made with 🐾 in Palm Beach.</div>
+        <div>© 2026 The Yard Concierge. Made with 🐾 in Palm Beach. <a href="admin.html" class="admin-link" title="Admin">·</a></div>
         <div class="footer-social">
           <a href="https://instagram.com/theyardconcierge" aria-label="Instagram">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.4a4 4 0 11-7.9.6 4 4 0 017.9-.6z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
