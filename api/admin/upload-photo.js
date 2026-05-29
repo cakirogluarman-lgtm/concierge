@@ -44,12 +44,16 @@ module.exports = async (req, res) => {
       return res.status(413).json({ error: 'Photo too large after compression. Try a smaller image.' });
     }
 
-    // Upload to Vercel Blob — public so the customer's email client can fetch it
-    const filename = `yard-photos/${subscriptionId}/${Date.now()}.${ext}`;
+    // Upload to Vercel Blob with a STABLE filename per member, so each upload
+    // overwrites the previous one. Storage stays tiny forever
+    // (one photo slot per member, ~250KB, never accumulates).
+    const filename = `yard-photos/${subscriptionId}/latest.${ext}`;
     const blob = await put(filename, buf, {
       access: 'public',
       contentType: mime,
-      addRandomSuffix: false
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      cacheControlMaxAge: 0  // so customers see the new photo, not a cached old one
     });
 
     // Stash latest photo URL in Stripe metadata so mark-visit-complete can use it

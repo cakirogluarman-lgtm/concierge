@@ -610,8 +610,11 @@
       60% { transform: scale(1.05); opacity: 0.95; }
       100% { transform: scale(1); opacity: 0.9; }
     }
+    .how-step[data-step="1"] .how-step-num { color: var(--green-soft); }
     .how-step[data-step="2"] .how-step-num { color: var(--gold-soft); }
     .how-step[data-step="3"] .how-step-num { color: var(--green-soft); }
+    .how-step[data-step="4"] .how-step-num { color: var(--gold-soft); }
+    .how-step[data-step="5"] .how-step-num { color: var(--green-soft); }
 
     /* Big illustration on the right */
     .how-step-art {
@@ -622,14 +625,29 @@
       justify-content: center;
       color: var(--green-deep);
     }
+    .how-step[data-step="1"] .how-step-art { color: var(--green-deep); }
     .how-step[data-step="2"] .how-step-art { color: var(--gold-deep); }
     .how-step[data-step="3"] .how-step-art { color: var(--green-deep); }
+    .how-step[data-step="4"] .how-step-art { color: var(--gold-deep); }
+    .how-step[data-step="5"] .how-step-art { color: var(--green-deep); }
     .how-step-art svg { width: 100%; height: 100%; max-width: 240px; }
 
     /* Per-step unique illustration entrance animations */
-    .how-step.active .how-step-art[data-anim="stamp"]   { animation: artStamp 0.8s var(--ease-spring) 0.2s both; }
-    .how-step.active .how-step-art[data-anim="flip"]    { animation: artFlip  0.9s var(--ease-out)    0.2s both; }
-    .how-step.active .how-step-art[data-anim="sparkle"] { animation: artSpin  0.9s var(--ease-spring) 0.2s both; }
+    .how-step.active .how-step-art[data-anim="stamp"]    { animation: artStamp  0.8s var(--ease-spring) 0.2s both; }
+    .how-step.active .how-step-art[data-anim="flip"]     { animation: artFlip   0.9s var(--ease-out)    0.2s both; }
+    .how-step.active .how-step-art[data-anim="sparkle"]  { animation: artSpin   0.9s var(--ease-spring) 0.2s both; }
+    .how-step.active .how-step-art[data-anim="riseup"]   { animation: artRise   0.7s var(--ease-spring) 0.2s both; }
+    .how-step.active .how-step-art[data-anim="zoomin"]   { animation: artZoom   0.7s var(--ease-spring) 0.2s both; }
+    @keyframes artRise {
+      0% { transform: translateY(40px) scale(0.85); opacity: 0; }
+      60% { transform: translateY(-4px) scale(1.03); opacity: 1; }
+      100% { transform: translateY(0) scale(1); }
+    }
+    @keyframes artZoom {
+      0% { transform: scale(0.75); opacity: 0; }
+      60% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); }
+    }
     @keyframes artStamp {
       0% { transform: scale(0.5) rotate(-15deg) translateY(20px); opacity: 0; }
       60% { transform: scale(1.04) rotate(3deg) translateY(0); opacity: 1; }
@@ -645,33 +663,99 @@
       100% { transform: scale(1) rotate(0deg); opacity: 1; }
     }
 
-    /* Step 1 — paw bits stamp in one by one */
-    .how-step.active[data-step="1"] .paw-bit {
+    /* Step 1 — plan cards pop in, then the middle (popular) one gets a satisfying check */
+    .how-step.active[data-step="1"] .plan-card {
+      animation: planPop 0.5s var(--ease-spring) both;
+      transform-origin: center bottom;
+    }
+    .how-step.active[data-step="1"] .plan-card.c1 { animation-delay: 0.35s; }
+    .how-step.active[data-step="1"] .plan-card.c2 { animation-delay: 0.45s; }
+    .how-step.active[data-step="1"] .plan-card.c3 { animation-delay: 0.55s; }
+    @keyframes planPop {
+      0% { transform: translateY(20px) scale(0.85); opacity: 0; }
+      70% { transform: translateY(-3px) scale(1.04); opacity: 1; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .how-step.active[data-step="1"] .plan-check {
+      animation: checkPop 0.45s var(--ease-spring) 0.85s both;
+      transform-origin: center;
+    }
+    .how-step.active[data-step="1"] .plan-card.c2 {
+      animation: planPop 0.5s var(--ease-spring) 0.45s both, planPulse 0.5s var(--ease-spring) 0.85s both;
+    }
+    @keyframes planPulse {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-4px) scale(1.06); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    @keyframes checkPop {
+      0% { transform: scale(0); opacity: 0; }
+      70% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Step 2 — paw bits stamp in one by one (was old step 1) */
+    .how-step.active[data-step="2"] .paw-bit {
       animation: pawStamp 0.5s var(--ease-spring) both;
       transform-origin: center;
     }
-    .how-step.active[data-step="1"] .paw-bit.p1 { animation-delay: 0.45s; }
-    .how-step.active[data-step="1"] .paw-bit.p2 { animation-delay: 0.55s; }
-    .how-step.active[data-step="1"] .paw-bit.p3 { animation-delay: 0.6s; }
-    .how-step.active[data-step="1"] .paw-bit.p4 { animation-delay: 0.65s; }
-    .how-step.active[data-step="1"] .paw-bit.p5 { animation-delay: 0.7s; }
+    .how-step.active[data-step="2"] .paw-bit.p1 { animation-delay: 0.45s; }
+    .how-step.active[data-step="2"] .paw-bit.p2 { animation-delay: 0.55s; }
+    .how-step.active[data-step="2"] .paw-bit.p3 { animation-delay: 0.6s; }
+    .how-step.active[data-step="2"] .paw-bit.p4 { animation-delay: 0.65s; }
+    .how-step.active[data-step="2"] .paw-bit.p5 { animation-delay: 0.7s; }
     @keyframes pawStamp {
       0% { transform: scale(0); opacity: 0; }
       70% { transform: scale(1.4); opacity: 1; }
       100% { transform: scale(1); }
     }
 
-    /* Step 2 — calendar ticks pulse */
-    .how-step.active[data-step="2"] .cal-tick {
+    /* Step 3 — time slots appear in a column, one gets tapped/selected with a pulse */
+    .how-step.active[data-step="3"] .slot-pill {
+      animation: slotIn 0.4s var(--ease-out) both;
+      transform-origin: left center;
+    }
+    .how-step.active[data-step="3"] .slot-pill.t1 { animation-delay: 0.35s; }
+    .how-step.active[data-step="3"] .slot-pill.t2 { animation-delay: 0.42s; }
+    .how-step.active[data-step="3"] .slot-pill.t3 { animation-delay: 0.49s; }
+    .how-step.active[data-step="3"] .slot-pill.t4 { animation-delay: 0.56s; }
+    .how-step.active[data-step="3"] .slot-pill.t5 { animation-delay: 0.63s; }
+    @keyframes slotIn {
+      0% { transform: translateX(-10px); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    .how-step.active[data-step="3"] .slot-selected-bg {
+      animation: slotSelect 0.5s var(--ease-spring) 0.9s both;
+    }
+    @keyframes slotSelect {
+      0% { transform: scaleX(0); opacity: 0; }
+      70% { transform: scaleX(1.04); opacity: 1; }
+      100% { transform: scaleX(1); opacity: 1; }
+    }
+    .how-step.active[data-step="3"] .slot-tap-ring {
+      animation: tapRing 0.6s var(--ease-out) 0.95s both;
+      transform-origin: center;
+    }
+    @keyframes tapRing {
+      0% { transform: scale(0.4); opacity: 1; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+    .how-step.active[data-step="3"] .slot-check {
+      animation: checkPop 0.4s var(--ease-spring) 1.1s both;
+      transform-origin: center;
+    }
+
+    /* Step 4 — calendar ticks pulse (was old step 2) */
+    .how-step.active[data-step="4"] .cal-tick {
       animation: tickPulse 0.4s var(--ease-out) both;
     }
-    .how-step.active[data-step="2"] .cal-tick.t1 { animation-delay: 0.5s; }
-    .how-step.active[data-step="2"] .cal-tick.t2 { animation-delay: 0.65s; }
+    .how-step.active[data-step="4"] .cal-tick.t1 { animation-delay: 0.5s; }
+    .how-step.active[data-step="4"] .cal-tick.t2 { animation-delay: 0.65s; }
     @keyframes tickPulse {
       0% { stroke-dashoffset: 8; opacity: 0; }
       100% { stroke-dashoffset: 0; opacity: 1; }
     }
-    .how-step.active[data-step="2"] .cal-line {
+    .how-step.active[data-step="4"] .cal-line {
       animation: lineDraw 0.5s var(--ease-out) 0.6s both;
       stroke-dasharray: 24;
     }
@@ -680,15 +764,15 @@
       to { stroke-dashoffset: 0; }
     }
 
-    /* Step 3 — sparkles burst */
-    .how-step.active[data-step="3"] .sp {
+    /* Step 5 — sparkles burst (was old step 3) */
+    .how-step.active[data-step="5"] .sp {
       animation: sparkleBurst 0.6s var(--ease-spring) both;
       transform-origin: center;
     }
-    .how-step.active[data-step="3"] .sp.s1 { animation-delay: 0.55s; }
-    .how-step.active[data-step="3"] .sp.s2 { animation-delay: 0.65s; }
-    .how-step.active[data-step="3"] .sp.s3 { animation-delay: 0.75s; }
-    .how-step.active[data-step="3"] .sp.s4 { animation-delay: 0.85s; }
+    .how-step.active[data-step="5"] .sp.s1 { animation-delay: 0.55s; }
+    .how-step.active[data-step="5"] .sp.s2 { animation-delay: 0.65s; }
+    .how-step.active[data-step="5"] .sp.s3 { animation-delay: 0.75s; }
+    .how-step.active[data-step="5"] .sp.s4 { animation-delay: 0.85s; }
     @keyframes sparkleBurst {
       0% { opacity: 0; transform: scale(0) rotate(-180deg); }
       70% { opacity: 1; transform: scale(1.4) rotate(20deg); }
@@ -1148,6 +1232,8 @@
       overflow-y: visible;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;  /* mobile: lock to horizontal swipes only — no vertical bleed */
+      overscroll-behavior-x: contain; /* don't trigger page back-nav on swipe */
       gap: 20px;
       padding: 8px 24px 24px;
       margin: 0 -24px;
@@ -1636,6 +1722,8 @@
         overflow-y: visible;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;  /* iPhone fix: only horizontal swipes — no page scroll bleed-through */
+        overscroll-behavior-x: contain;
         gap: 14px;
         padding: 16px 24px 24px;
         margin: 0 -24px;
@@ -2015,14 +2103,18 @@
     body.coastal .how-dot.active { background: #6BC8AC; }
     body.coastal .how-dot.completed { background: #6BC8AC; }
     body.coastal .how-step-num { color: rgba(107, 200, 172, 0.55); }
-    body.coastal .how-step[data-step="2"] .how-step-num { color: rgba(255, 217, 130, 0.75); }
-    /* Step illustrations in coastal — gold pops more, teal stays soft */
+    body.coastal .how-step[data-step="2"] .how-step-num,
+    body.coastal .how-step[data-step="4"] .how-step-num { color: rgba(255, 217, 130, 0.75); }
+    /* Step illustrations in coastal — gold pops on even steps, teal on odd */
     body.coastal .how-step-art { color: #6BC8AC; }
-    body.coastal .how-step[data-step="2"] .how-step-art {
+    body.coastal .how-step[data-step="2"] .how-step-art,
+    body.coastal .how-step[data-step="4"] .how-step-art {
       color: #FFD982;
       filter: drop-shadow(0 0 12px rgba(255, 217, 130, 0.45));
     }
-    body.coastal .how-step[data-step="3"] .how-step-art { color: #6BC8AC; }
+    body.coastal .how-step[data-step="1"] .how-step-art,
+    body.coastal .how-step[data-step="3"] .how-step-art,
+    body.coastal .how-step[data-step="5"] .how-step-art { color: #6BC8AC; }
     /* Legacy icon overrides (in case any remain) */
     body.coastal .how-step-icon { background: rgba(107, 200, 172, 0.18); color: #6BC8AC; }
     body.coastal .how-step[data-step="2"] .how-step-icon { background: rgba(255, 217, 130, 0.2); color: #FFD982; }
@@ -2387,7 +2479,7 @@
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">How it works</span>
-        <h2>Spotless yards in <span class="accent-green">three simple steps.</span></h2>
+        <h2>Spotless yards in <span class="accent-green">five simple steps.</span></h2>
       </div>
 
       <div class="how-experience reveal">
@@ -2396,14 +2488,63 @@
           <button class="how-dot active" data-step="1" aria-label="Step 1"></button>
           <button class="how-dot" data-step="2" aria-label="Step 2"></button>
           <button class="how-dot" data-step="3" aria-label="Step 3"></button>
+          <button class="how-dot" data-step="4" aria-label="Step 4"></button>
+          <button class="how-dot" data-step="5" aria-label="Step 5"></button>
         </div>
 
         <!-- Step stage -->
         <div class="how-stage">
-          <!-- Step 1 -->
+          <!-- Step 1 — Pick your plan (NEW) -->
           <div class="how-step active" data-step="1">
             <div class="how-step-top">
               <div class="how-step-num">01</div>
+              <div class="how-step-art" data-anim="riseup">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <!-- 3 plan cards in a row, middle one is the popular pick -->
+                    <!-- Left card: bi-weekly -->
+                    <g class="plan-card c1">
+                      <rect x="18" y="56" width="48" height="100" rx="8" fill="currentColor" fill-opacity="0.05"/>
+                      <line x1="28" y1="74" x2="56" y2="74" stroke-width="2.2"/>
+                      <line x1="28" y1="90" x2="50" y2="90" stroke-width="1.6" opacity="0.55"/>
+                      <line x1="28" y1="106" x2="46" y2="106" stroke-width="1.6" opacity="0.55"/>
+                      <text x="42" y="140" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="currentColor">$60</text>
+                    </g>
+                    <!-- Middle card: WEEKLY (popular) — gold accent + check -->
+                    <g class="plan-card c2">
+                      <rect x="76" y="42" width="48" height="118" rx="8" fill="#E5B048" fill-opacity="0.15" stroke="#E5B048"/>
+                      <rect x="84" y="32" width="32" height="14" rx="7" fill="#E5B048"/>
+                      <text x="100" y="42" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" font-weight="700" fill="#1B2B4D">POPULAR</text>
+                      <line x1="86" y1="64" x2="114" y2="64" stroke="#1B2B4D" stroke-width="2.2"/>
+                      <line x1="86" y1="80" x2="108" y2="80" stroke="#1B2B4D" stroke-width="1.6" opacity="0.55"/>
+                      <line x1="86" y1="96" x2="104" y2="96" stroke="#1B2B4D" stroke-width="1.6" opacity="0.55"/>
+                      <text x="100" y="132" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="800" fill="#1B2B4D">$88</text>
+                    </g>
+                    <!-- Right card: twice-weekly -->
+                    <g class="plan-card c3">
+                      <rect x="134" y="56" width="48" height="100" rx="8" fill="currentColor" fill-opacity="0.05"/>
+                      <line x1="144" y1="74" x2="172" y2="74" stroke-width="2.2"/>
+                      <line x1="144" y1="90" x2="166" y2="90" stroke-width="1.6" opacity="0.55"/>
+                      <line x1="144" y1="106" x2="162" y2="106" stroke-width="1.6" opacity="0.55"/>
+                      <text x="158" y="140" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="currentColor">$144</text>
+                    </g>
+                    <!-- Big check on the middle (popular) card -->
+                    <g class="plan-check">
+                      <circle cx="100" cy="100" r="22" fill="#2D6A3E" stroke="none"/>
+                      <path d="M88 100 L96 108 L112 92" stroke="#FAF6EE" stroke-width="3" fill="none"/>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+            </div>
+            <h3>Pick your plan</h3>
+            <p>Choose how often we visit — bi-weekly, weekly, or twice-weekly. Switch or cancel anytime. No contracts.</p>
+          </div>
+
+          <!-- Step 2 — Tell us about your pup (was Step 1) -->
+          <div class="how-step" data-step="2">
+            <div class="how-step-top">
+              <div class="how-step-num">02</div>
               <div class="how-step-art" data-anim="stamp">
                 <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <g stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
@@ -2436,13 +2577,69 @@
               </div>
             </div>
             <h3>Tell us about your pup</h3>
-            <p>Quick 30-second form. Your address, your dog (or dogs), and how often you'd like us to swing by.</p>
+            <p>30-second form — your address, your dog (or dogs), the gate code, anything we need to know.</p>
           </div>
 
-          <!-- Step 2 -->
-          <div class="how-step" data-step="2">
+          <!-- Step 3 — Pick your visit time (NEW) -->
+          <div class="how-step" data-step="3">
             <div class="how-step-top">
-              <div class="how-step-num">02</div>
+              <div class="how-step-num">03</div>
+              <div class="how-step-art" data-anim="zoomin">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <!-- Clock on the left -->
+                    <circle cx="48" cy="100" r="32" fill="currentColor" fill-opacity="0.05"/>
+                    <circle cx="48" cy="100" r="32"/>
+                    <!-- Tick marks at 12, 3, 6, 9 -->
+                    <line x1="48" y1="74" x2="48" y2="78" stroke-width="2.2"/>
+                    <line x1="74" y1="100" x2="70" y2="100" stroke-width="2.2"/>
+                    <line x1="48" y1="126" x2="48" y2="122" stroke-width="2.2"/>
+                    <line x1="22" y1="100" x2="26" y2="100" stroke-width="2.2"/>
+                    <!-- Hands pointing to ~6:30 -->
+                    <line x1="48" y1="100" x2="48" y2="116" stroke-width="2.6"/>
+                    <line x1="48" y1="100" x2="61" y2="100" stroke-width="2.2"/>
+                    <circle cx="48" cy="100" r="2.5" fill="currentColor"/>
+
+                    <!-- Time-slot pills on the right -->
+                    <!-- Slot 1: 6:00 AM -->
+                    <g class="slot-pill t1">
+                      <rect x="92" y="48" width="86" height="16" rx="8" fill="currentColor" fill-opacity="0.05"/>
+                      <text x="135" y="60" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="currentColor">6:00 AM</text>
+                    </g>
+                    <!-- Slot 2: 6:15 AM -->
+                    <g class="slot-pill t2">
+                      <rect x="92" y="68" width="86" height="16" rx="8" fill="currentColor" fill-opacity="0.05"/>
+                      <text x="135" y="80" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="currentColor">6:15 AM</text>
+                    </g>
+                    <!-- Slot 3: 6:30 AM — the SELECTED one -->
+                    <g class="slot-pill t3" style="position:relative;">
+                      <rect class="slot-selected-bg" x="92" y="88" width="86" height="20" rx="10" fill="#2D6A3E" stroke="#2D6A3E"/>
+                      <text x="135" y="102" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#FAF6EE">6:30 AM ✓</text>
+                      <!-- Tap ripple ring -->
+                      <circle class="slot-tap-ring" cx="135" cy="98" r="22" fill="none" stroke="#2D6A3E" stroke-width="2" opacity="0"/>
+                    </g>
+                    <!-- Slot 4: 6:45 AM -->
+                    <g class="slot-pill t4">
+                      <rect x="92" y="114" width="86" height="16" rx="8" fill="currentColor" fill-opacity="0.05"/>
+                      <text x="135" y="126" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="currentColor">6:45 AM</text>
+                    </g>
+                    <!-- Slot 5: 7:00 AM -->
+                    <g class="slot-pill t5">
+                      <rect x="92" y="134" width="86" height="16" rx="8" fill="currentColor" fill-opacity="0.05"/>
+                      <text x="135" y="146" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="currentColor">7:00 AM</text>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+            </div>
+            <h3>Pick your visit time</h3>
+            <p>Choose a recurring day and 15-minute window. Same time every visit — easy to plan around your routine.</p>
+          </div>
+
+          <!-- Step 4 — We show up on schedule (was Step 2) -->
+          <div class="how-step" data-step="4">
+            <div class="how-step-top">
+              <div class="how-step-num">04</div>
               <div class="how-step-art" data-anim="flip">
                 <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <g stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
@@ -2485,14 +2682,14 @@
                 </svg>
               </div>
             </div>
-            <h3>We show up on schedule</h3>
-            <p>Same friendly face, same day every week. You get a text when we arrive and a photo when we leave.</p>
+            <h3>We show up like clockwork</h3>
+            <p>Same friendly face, same time every visit. You get a confirmation when we arrive and a photo when we leave.</p>
           </div>
 
-          <!-- Step 3 -->
-          <div class="how-step" data-step="3">
+          <!-- Step 5 — Enjoy your yard again (was Step 3) -->
+          <div class="how-step" data-step="5">
             <div class="how-step-top">
-              <div class="how-step-num">03</div>
+              <div class="how-step-num">05</div>
               <div class="how-step-art" data-anim="sparkle">
                 <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <g stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
@@ -2590,7 +2787,7 @@
           <button class="how-nav-btn how-prev" disabled aria-label="Previous step">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <span class="how-step-label">Step <strong>1</strong> of 3</span>
+          <span class="how-step-label">Step <strong>1</strong> of 5</span>
           <button class="how-nav-btn how-next" aria-label="Next step">
             <span class="how-next-text">Next step</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -3075,7 +3272,7 @@
         </div>
         <div class="faq-item">
           <button class="faq-q"><span class="faq-icon faq-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><line class="card-stripe" x1="3" y1="10" x2="21" y2="10"/><line x1="7" y1="15" x2="11" y2="15"/></svg></span><span class="faq-q-text">How do I pay?</span><span class="faq-toggle">+</span></button>
-          <div class="faq-a"><div class="faq-a-inner">One card on file, billed monthly. Auto-charged the first of each month. No invoices, no chasing.</div></div>
+          <div class="faq-a"><div class="faq-a-inner">One card on file, billed monthly. We charge on the day you sign up, then automatically the same day each month going forward — predictable for budgeting. No invoices, no chasing.</div></div>
         </div>
       </div>
       <button class="next-arrow" aria-label="Scroll to next section">
