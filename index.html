@@ -207,8 +207,11 @@
       height: 52px;
       border-radius: 50%;
       box-shadow: var(--shadow-sm);
-      transition: transform 0.4s var(--ease-spring), filter 0.6s var(--ease-out);
+      /* Only transform animates — filter swap on mode toggle is instant to avoid black flash on mobile */
+      transition: transform 0.4s var(--ease-spring);
+      filter: none;
     }
+    .footer-brand img { filter: none; }
     /* Coastal mode logo — sandy gold (matches the coastal accent color) */
     body.coastal .logo-link img,
     body.coastal .footer-brand img {
@@ -1784,7 +1787,7 @@
       max-width: 440px;
       object-fit: contain;
       animation: heroLogoFloat 6s ease-in-out infinite;
-      transition: filter 0.6s var(--ease-out);
+      /* No filter transition — mode swap is instant to avoid black flash on mobile during interpolation */
       filter: drop-shadow(0 24px 40px rgba(27, 43, 77, 0.12));
     }
     body.coastal .hero-dogs {
