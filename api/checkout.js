@@ -133,6 +133,9 @@ module.exports = async (req, res) => {
       mode: 'subscription',
       line_items: lineItems,
       customer_email: email,
+      // Card only — disables Stripe Link's phone verification step.
+      // Apple Pay & Google Pay still work (they're card wallets).
+      payment_method_types: ['card'],
       allow_promotion_codes: true,
       billing_address_collection: 'auto',
       success_url: `${origin}/membership.html?status=success&session_id={CHECKOUT_SESSION_ID}`,
