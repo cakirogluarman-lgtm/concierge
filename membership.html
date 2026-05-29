@@ -1482,6 +1482,13 @@
       twiceweekly: { name: 'Twice-Weekly', title: 'Two times a week', desc: 'For big yards or multi-dog homes', price: 18, monthly: 144, visitsPerMonth: 8 }
     };
 
+    // Stripe Payment Link URLs — one per plan
+    const STRIPE_LINKS = {
+      biweekly:    'https://buy.stripe.com/00w9AUfjpckv9U38Wg87K00',
+      weekly:      'https://buy.stripe.com/8x200kb39doz1nx0pK87K01',
+      twiceweekly: 'https://buy.stripe.com/aFa6oI4ELgALaY7b4o87K02'
+    };
+
     const state = {
       plan: 'weekly',
       firstName: '', lastName: '', email: '', phone: '',
@@ -1609,8 +1616,24 @@
         return;
       }
       if (currentStep === 10) {
+        // Final step — redirect to Stripe Payment Link for the selected plan
+        const link = STRIPE_LINKS[state.plan];
+        // Stash form data in localStorage as a backup until we wire up email/webhook
+        try {
+          localStorage.setItem('yc-last-signup', JSON.stringify({
+            ...state,
+            submittedAt: new Date().toISOString()
+          }));
+        } catch (e) {}
+        // Fun feedback while redirect happens
         confettiBurst();
-        showStep(11);
+        if (link) {
+          // Brief delay so user sees the confetti before redirecting
+          setTimeout(() => { window.location.href = link; }, 700);
+        } else {
+          // Fallback to internal success screen if no link configured
+          showStep(11);
+        }
       } else if (currentStep < TOTAL_STEPS) {
         showStep(currentStep + 1);
       }
