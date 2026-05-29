@@ -1478,12 +1478,8 @@
       twiceweekly: { name: 'Twice-Weekly', title: 'Two times a week', desc: 'For big yards or multi-dog homes', price: 18, monthly: 144, visitsPerMonth: 8 }
     };
 
-    // Stripe Payment Link URLs — one per plan
-    const STRIPE_LINKS = {
-      biweekly:    'https://buy.stripe.com/00w9AUfjpckv9U38Wg87K00',
-      weekly:      'https://buy.stripe.com/8x200kb39doz1nx0pK87K01',
-      twiceweekly: 'https://buy.stripe.com/aFa6oI4ELgALaY7b4o87K02'
-    };
+    // Dynamic checkout is built server-side by /api/checkout (handles base plan + add-ons + extra dogs).
+    // The static Payment Links still exist in Stripe as a fallback but the form uses the dynamic flow.
 
     const state = {
       plan: 'weekly',
@@ -1503,6 +1499,8 @@
     const urlParams = new URLSearchParams(window.location.search);
     const planParam = urlParams.get('plan');
     if (planParam && PLANS[planParam]) state.plan = planParam;
+    // Returning from Stripe checkout?
+    const statusParam = urlParams.get('status');
 
     // ============================================
     // ELEMENTS
@@ -1603,7 +1601,7 @@
       return true;
     }
 
-    function next() {
+    async function next() {
       if (!validateStep(currentStep)) {
         // Shake animation on invalid
         const active = document.querySelector('.step.active');
@@ -1612,23 +1610,39 @@
         return;
       }
       if (currentStep === 10) {
-        // Final step — redirect to Stripe Payment Link for the selected plan
-        const link = STRIPE_LINKS[state.plan];
-        // Stash form data in localStorage as a backup until we wire up email/webhook
+        // Final step — build dynamic Stripe Checkout via our serverless function
+        // Stash form data in localStorage as a backup
         try {
           localStorage.setItem('yc-last-signup', JSON.stringify({
             ...state,
             submittedAt: new Date().toISOString()
           }));
         } catch (e) {}
-        // Fun feedback while redirect happens
+
+        // Visual feedback while we contact the server
         confettiBurst();
-        if (link) {
-          // Brief delay so user sees the confetti before redirecting
-          setTimeout(() => { window.location.href = link; }, 700);
-        } else {
-          // Fallback to internal success screen if no link configured
-          showStep(11);
+        const originalLabel = nextBtn.innerHTML;
+        nextBtn.disabled = true;
+        nextBtn.innerHTML = 'Setting up your subscription…';
+
+        try {
+          const response = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(state)
+          });
+          const data = await response.json();
+          if (response.ok && data.url) {
+            // Brief beat so confetti is visible, then redirect to Stripe
+            setTimeout(() => { window.location.href = data.url; }, 500);
+          } else {
+            throw new Error(data.error || 'Checkout failed');
+          }
+        } catch (err) {
+          console.error('Checkout error:', err);
+          nextBtn.disabled = false;
+          nextBtn.innerHTML = originalLabel;
+          alert("Hmm, we couldn't reach the payment processor. Please try again — your info is saved. (" + err.message + ")");
         }
       } else if (currentStep < TOTAL_STEPS) {
         showStep(currentStep + 1);
@@ -1969,8 +1983,17 @@
     `;
     document.head.appendChild(styleSheet);
 
-    // Init
-    showStep(1);
+    // Init — handle return from Stripe checkout if applicable
+    if (statusParam === 'success') {
+      // Skip the form entirely, show the success screen with confetti
+      showStep(11);
+      setTimeout(confettiBurst, 200);
+    } else if (statusParam === 'canceled') {
+      // They canceled at Stripe — drop them back at the review step so they can try again
+      showStep(10);
+    } else {
+      showStep(1);
+    }
   </script>
 </body>
 </html>

@@ -1,0 +1,9 @@
+{
+  "name": "the-yard-concierge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Yard Concierge — premium pet waste removal in Palm Beach County",
+  "dependencies": {
+    "stripe": "^16.12.0"
+  }
+}
