@@ -1,0 +1,25 @@
+# macOS junk
+.DS_Store
+._.DS_Store
+**/.DS_Store
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+
+# Node (in case you add it later)
+node_modules/
+.env
+.env.local
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Vercel local cache
+.vercel

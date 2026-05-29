@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FAF6EE">
+  <title>Become a Member — The Yard Concierge</title>
+  <link rel="icon" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* DESIGN TOKENS — match the main site */
+    :root {
+      --green-deep: #2D6A3E;
+      --green-mid: #4A8E5C;
+      --green-soft: #C7E2C0;
+      --green-cream: #E8F1E4;
+      --gold: #E5B048;
+      --gold-deep: #C9A86B;
+      --gold-soft: #F5E4B3;
+      --gold-bright: #F0C25A;
+      --navy: #1B2B4D;
+      --navy-mid: #2D3F66;
+      --navy-soft: #5A6580;
+      --cream: #FAF6EE;
+      --paper: #FBF8F1;
+      --white: #FFFFFF;
+      --purple: #5B3E8C;
+      --purple-deep: #38255A;
+
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 28px;
+      --radius-xl: 40px;
+      --radius-pill: 999px;
+
+      --shadow-sm: 0 2px 8px rgba(27, 43, 77, 0.06);
+      --shadow-md: 0 8px 24px rgba(27, 43, 77, 0.08);
+      --shadow-lg: 0 20px 50px rgba(27, 43, 77, 0.12);
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 17px;
+      line-height: 1.55;
+      color: var(--navy);
+      background: var(--cream);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    h1, h2, h3 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--navy);
+    }
+    h1 { font-size: clamp(2rem, 4.8vw, 3.5rem); font-weight: 800; }
+    h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+    a { color: inherit; text-decoration: none; }
+    input, select, textarea { font: inherit; color: inherit; }
+
+    /* HEADER */
+    .form-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+      background: rgba(250, 246, 238, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(27, 43, 77, 0.06);
+    }
+    .form-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .form-logo img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+    }
+    .form-logo-text {
+      font-family: 'Fraunces', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .form-close {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy-soft);
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      transition: all 0.3s var(--ease-out);
+    }
+    .form-close:hover { background: rgba(27, 43, 77, 0.06); color: var(--navy); }
+    .form-close svg { width: 16px; height: 16px; }
+
+    /* PROGRESS BAR */
+    .progress {
+      position: fixed;
+      top: 74px; left: 0; right: 0;
+      height: 4px;
+      background: rgba(27, 43, 77, 0.06);
+      z-index: 49;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--green-deep), var(--gold));
+      transition: width 0.5s var(--ease-out);
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* MAIN FORM CONTAINER */
+    .form-main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 130px 24px 140px;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* STEPS */
+    .step {
+      position: absolute;
+      top: 130px; left: 24px; right: 24px;
+      max-width: 672px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+      pointer-events: none;
+    }
+    .step.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+      position: relative;
+      top: 0; left: 0; right: 0;
+    }
+    .step.prev { transform: translateX(-40px); }
+
+    .step-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green-deep);
+      background: var(--green-cream);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.6s var(--ease-out) 0.1s forwards;
+    }
+    .step h1 {
+      margin-bottom: 12px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.6s var(--ease-out) 0.2s forwards;
+    }
+    .step .step-sub {
+      font-size: 18px;
+      color: var(--navy-soft);
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.6s var(--ease-out) 0.3s forwards;
+    }
+    .step .step-body {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.6s var(--ease-out) 0.4s forwards;
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* INPUTS */
+    .input-large {
+      width: 100%;
+      padding: 18px 22px;
+      border: 2px solid rgba(27, 43, 77, 0.12);
+      border-radius: var(--radius-md);
+      font-size: 19px;
+      font-family: inherit;
+      background: var(--white);
+      color: var(--navy);
+      transition: all 0.3s var(--ease-out);
+    }
+    .input-large::placeholder { color: var(--navy-soft); opacity: 0.6; }
+    .input-large:focus {
+      outline: none;
+      border-color: var(--green-deep);
+      box-shadow: 0 0 0 4px rgba(45, 106, 62, 0.12);
+    }
+    .input-row {
+      display: flex;
+      gap: 12px;
+    }
+    .input-row .input-large { flex: 1; }
+    textarea.input-large {
+      resize: vertical;
+      min-height: 100px;
+      font-family: inherit;
+    }
+    .input-hint {
+      font-size: 13px;
+      color: var(--navy-soft);
+      margin-top: 8px;
+    }
+
+    /* ADDRESS AUTOCOMPLETE */
+    .autocomplete-wrap {
+      position: relative;
+    }
+    .autocomplete-list {
+      position: absolute;
+      top: calc(100% - 4px);
+      left: 0; right: 0;
+      background: var(--white);
+      border: 2px solid var(--green-deep);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      max-height: 280px;
+      overflow-y: auto;
+      z-index: 60;
+      animation: dropdownIn 0.2s var(--ease-out);
+    }
+    @keyframes dropdownIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .autocomplete-item {
+      padding: 14px 18px;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--navy);
+      border-bottom: 1px solid rgba(27, 43, 77, 0.06);
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .autocomplete-item:last-child { border-bottom: none; }
+    .autocomplete-item:hover,
+    .autocomplete-item.highlighted {
+      background: var(--green-cream);
+    }
+    .autocomplete-item .pin {
+      width: 18px;
+      height: 18px;
+      color: var(--green-deep);
+      flex-shrink: 0;
+    }
+    .autocomplete-item .addr-text {
+      flex: 1;
+      line-height: 1.3;
+    }
+    .autocomplete-item .addr-text strong {
+      display: block;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .autocomplete-item .addr-text span {
+      font-size: 13px;
+      color: var(--navy-soft);
+    }
+    .autocomplete-loading {
+      padding: 14px 18px;
+      font-size: 14px;
+      color: var(--navy-soft);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .autocomplete-loading::before {
+      content: '';
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--green-soft);
+      border-top-color: var(--green-deep);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .autocomplete-empty {
+      padding: 14px 18px;
+      font-size: 14px;
+      color: var(--navy-soft);
+      text-align: center;
+    }
+
+    /* OPTION CARDS (radio-style choices) */
+    .option-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .option-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .option-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    @media (max-width: 540px) {
+      .option-grid.cols-3, .option-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+    }
+    .option-card {
+      padding: 20px 22px;
+      border: 2px solid rgba(27, 43, 77, 0.1);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.3s var(--ease-spring);
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+    }
+    .option-card:hover {
+      border-color: var(--green-deep);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .option-card.selected {
+      border-color: var(--green-deep);
+      background: var(--green-cream);
+      box-shadow: 0 8px 20px rgba(45, 106, 62, 0.18);
+    }
+    .option-card.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      width: 24px;
+      height: 24px;
+      background: var(--green-deep);
+      color: var(--cream);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      animation: checkPop 0.4s var(--ease-spring);
+    }
+    @keyframes checkPop {
+      from { transform: scale(0) rotate(-90deg); }
+      to { transform: scale(1) rotate(0); }
+    }
+    .option-emoji {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .option-text {
+      flex: 1;
+    }
+    .option-text strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .option-text span {
+      font-size: 13px;
+      color: var(--navy-soft);
+    }
+
+    /* NUMBER STEPPER */
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px 24px;
+      border: 2px solid rgba(27, 43, 77, 0.08);
+    }
+    .stepper-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--green-cream);
+      color: var(--green-deep);
+      font-size: 28px;
+      font-weight: 700;
+      transition: all 0.3s var(--ease-spring);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .stepper-btn:hover {
+      background: var(--green-deep);
+      color: var(--cream);
+      transform: scale(1.1);
+    }
+    .stepper-btn:active { transform: scale(0.95); }
+    .stepper-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .stepper-value {
+      font-family: 'Fraunces', serif;
+      font-size: 64px;
+      font-weight: 800;
+      color: var(--navy);
+      min-width: 80px;
+      text-align: center;
+      transition: transform 0.3s var(--ease-spring);
+    }
+    .stepper-value.bump { animation: bump 0.3s var(--ease-spring); }
+    @keyframes bump {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    /* DOG CARDS */
+    .dog-card {
+      background: var(--white);
+      border: 2px solid rgba(27, 43, 77, 0.08);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 14px;
+      animation: dogCardIn 0.5s var(--ease-spring) both;
+    }
+    @keyframes dogCardIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .dog-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .dog-card-title {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .dog-card-remove {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(184, 65, 62, 0.1);
+      color: #B8413E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.3s var(--ease-spring);
+    }
+    .dog-card-remove:hover { background: #B8413E; color: var(--cream); transform: scale(1.1); }
+    .dog-card .input-large { padding: 14px 18px; font-size: 16px; margin-bottom: 12px; }
+    .dog-card label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy-soft);
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+    .size-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .size-btn {
+      padding: 12px 6px 10px;
+      border: 2px solid rgba(27, 43, 77, 0.1);
+      border-radius: var(--radius-md);
+      background: var(--paper);
+      color: var(--navy);
+      transition: all 0.3s var(--ease-spring);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .size-btn:hover {
+      border-color: var(--green-deep);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .size-btn.selected {
+      background: var(--green-cream);
+      border-color: var(--green-deep);
+      box-shadow: 0 6px 16px rgba(45, 106, 62, 0.22);
+    }
+    .size-dog-art {
+      height: 64px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s var(--ease-out);
+    }
+    .size-dog-art img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      opacity: 0.75;
+      filter: grayscale(20%);
+      transition: opacity 0.3s var(--ease-out), filter 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+    }
+    /* Progressive visual size scaling — S is small, XL is big */
+    .size-btn[data-size="S"]  .size-dog-art img { width: 56px; height: auto; transform: scale(0.85); }
+    .size-btn[data-size="M"]  .size-dog-art img { width: 50px; height: 50px; transform: scale(0.95); }
+    .size-btn[data-size="L"]  .size-dog-art img { width: 56px; height: 56px; transform: scale(1.05); }
+    .size-btn[data-size="XL"] .size-dog-art img { width: 60px; height: 60px; transform: scale(1.15); }
+    .size-btn:hover .size-dog-art img {
+      opacity: 0.95;
+      filter: grayscale(0);
+    }
+    .size-btn:hover[data-size="S"]  .size-dog-art img { transform: scale(0.92); }
+    .size-btn:hover[data-size="M"]  .size-dog-art img { transform: scale(1.02); }
+    .size-btn:hover[data-size="L"]  .size-dog-art img { transform: scale(1.12); }
+    .size-btn:hover[data-size="XL"] .size-dog-art img { transform: scale(1.22); }
+    .size-btn.selected .size-dog-art img {
+      opacity: 1;
+      filter: grayscale(0);
+      animation: dogPicked 0.65s var(--ease-spring);
+    }
+    @keyframes dogPicked {
+      0%   { transform: scale(0.5) translateY(8px) rotate(-8deg); opacity: 0; }
+      40%  { transform: scale(1.2) translateY(-6px) rotate(6deg); opacity: 1; }
+      70%  { transform: scale(0.95) translateY(0) rotate(-3deg); }
+      100% { transform: scale(1) translateY(0) rotate(0); opacity: 1; }
+    }
+    .size-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+      letter-spacing: 0.04em;
+    }
+    .size-btn.selected .size-label { color: var(--green-deep); }
+    .size-btn.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 18px;
+      height: 18px;
+      background: var(--green-deep);
+      color: var(--cream);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      animation: checkPop 0.35s var(--ease-spring);
+    }
+    .add-dog-btn {
+      width: 100%;
+      padding: 18px;
+      border: 2px dashed rgba(45, 106, 62, 0.3);
+      background: var(--green-cream);
+      color: var(--green-deep);
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s var(--ease-spring);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .add-dog-btn:hover {
+      background: var(--green-deep);
+      color: var(--cream);
+      border-color: var(--green-deep);
+      transform: translateY(-2px);
+    }
+
+    /* REVIEW SUMMARY */
+    .summary-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      border: 2px solid rgba(27, 43, 77, 0.08);
+      margin-bottom: 14px;
+    }
+    .summary-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(27, 43, 77, 0.08);
+    }
+    .summary-card h3 { font-size: 18px; }
+    .summary-edit {
+      font-size: 13px;
+      color: var(--green-deep);
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      transition: all 0.3s;
+    }
+    .summary-edit:hover { background: var(--green-cream); }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 6px 0;
+      font-size: 15px;
+    }
+    .summary-row .label { color: var(--navy-soft); }
+    .summary-row .value { color: var(--navy); font-weight: 600; text-align: right; }
+    .total-card {
+      background: linear-gradient(135deg, #2D6A3E 0%, #1F4F2D 100%);
+      color: var(--cream);
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 20px;
+      box-shadow: 0 12px 32px rgba(45, 106, 62, 0.25);
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: rgba(250, 246, 238, 0.85);
+    }
+    .total-row.total {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--cream);
+      padding-top: 14px;
+      margin-top: 8px;
+      border-top: 1px solid rgba(250, 246, 238, 0.2);
+    }
+    .total-row.total .price {
+      font-family: 'Fraunces', serif;
+      font-size: 32px;
+      color: var(--gold);
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 28px;
+      border-radius: var(--radius-pill);
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s var(--ease-spring);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--navy);
+      color: var(--cream);
+      box-shadow: var(--shadow-md);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--green-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(45, 106, 62, 0.25);
+    }
+    .btn-primary:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+    .btn-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--navy);
+      border: 2px solid rgba(27, 43, 77, 0.12);
+    }
+    .btn-secondary:hover { border-color: var(--navy); transform: translateY(-2px); }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+      color: var(--navy);
+      font-weight: 700;
+      box-shadow: 0 12px 32px rgba(229, 176, 72, 0.32);
+    }
+    .btn-gold:hover { transform: translateY(-2px) scale(1.02); }
+
+    /* FOOTER NAV */
+    .step-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      padding: 18px 24px;
+      background: rgba(250, 246, 238, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(27, 43, 77, 0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      z-index: 50;
+    }
+    .step-nav-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+    .back-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--white);
+      color: var(--navy);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s var(--ease-spring);
+      flex-shrink: 0;
+    }
+    .back-btn:hover:not(:disabled) {
+      background: var(--navy);
+      color: var(--cream);
+      transform: scale(1.08);
+    }
+    .back-btn:active:not(:disabled) { transform: scale(0.95); }
+    .back-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .back-btn svg { width: 20px; height: 20px; }
+    .next-btn {
+      flex: 1;
+      max-width: 280px;
+    }
+    .key-hint {
+      font-size: 12px;
+      color: var(--navy-soft);
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .key-hint kbd {
+      display: inline-block;
+      padding: 2px 6px;
+      background: rgba(27, 43, 77, 0.08);
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    @media (max-width: 540px) { .key-hint { display: none; } }
+
+    /* PLAN CARD on step 1 */
+    .plan-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      border: 2px solid rgba(27, 43, 77, 0.08);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .plan-card.weekly {
+      background: linear-gradient(135deg, #2D6A3E 0%, #1F4F2D 100%);
+      color: var(--cream);
+      border-color: rgba(229, 176, 72, 0.5);
+    }
+    .plan-card.twiceweekly {
+      background: linear-gradient(135deg, #5B3E8C 0%, #38255A 100%);
+      color: var(--cream);
+      border-color: rgba(244, 213, 141, 0.45);
+    }
+    .plan-card-tag {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      background: var(--green-cream);
+      color: var(--green-deep);
+    }
+    .plan-card.weekly .plan-card-tag { background: var(--gold); color: var(--navy); }
+    .plan-card.twiceweekly .plan-card-tag { background: #F4D58D; color: #38255A; }
+    .plan-card h2 { margin-bottom: 8px; }
+    .plan-card.weekly h2, .plan-card.twiceweekly h2 { color: var(--cream); }
+    .plan-card-price {
+      font-family: 'Fraunces', serif;
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .plan-card-price small {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      opacity: 0.7;
+    }
+    .plan-card-monthly {
+      font-size: 14px;
+      opacity: 0.75;
+      margin-top: 6px;
+    }
+    .change-plan-link {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--green-deep);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+    .plan-card.weekly .change-plan-link,
+    .plan-card.twiceweekly .change-plan-link {
+      color: var(--gold-soft);
+    }
+
+    /* SUCCESS SCREEN */
+    .success-screen {
+      text-align: center;
+      padding: 40px 0;
+    }
+    .success-icon {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2D6A3E 0%, #1F4F2D 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 50px rgba(45, 106, 62, 0.4);
+      animation: successPop 0.8s var(--ease-spring) both;
+    }
+    @keyframes successPop {
+      0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+      60% { transform: scale(1.15) rotate(10deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    .success-icon svg {
+      width: 70px;
+      height: 70px;
+      color: var(--gold);
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: drawCheck 0.6s var(--ease-out) 0.6s forwards;
+    }
+    @keyframes drawCheck {
+      to { stroke-dashoffset: 0; }
+    }
+    .confetti {
+      position: fixed;
+      pointer-events: none;
+      inset: 0;
+      overflow: hidden;
+      z-index: 100;
+    }
+    .confetti span {
+      position: absolute;
+      top: -20px;
+      width: 10px;
+      height: 14px;
+      opacity: 0;
+      animation: confettiFall 3s linear forwards;
+    }
+    @keyframes confettiFall {
+      0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+      100% { opacity: 0; transform: translateY(110vh) rotate(720deg); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 540px) {
+      .form-main { padding: 110px 18px 130px; }
+      .step { left: 18px; right: 18px; top: 110px; }
+      .input-row { flex-direction: column; }
+      .form-logo-text { display: none; }
+      .step h1 { font-size: 1.9rem; }
+      .step .step-sub { font-size: 16px; margin-bottom: 24px; }
+      .stepper { padding: 24px 16px; gap: 16px; }
+      .stepper-btn { width: 52px; height: 52px; font-size: 24px; }
+      .stepper-value { font-size: 52px; min-width: 64px; }
+    }
+
+    /* === HEADER RIGHT CLUSTER + MODE TOGGLE === */
+    .form-header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mode-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--cream);
+      border: 1px solid rgba(27, 43, 77, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      transition: all 0.5s var(--ease-out), background-color 0.5s var(--ease-out), color 0.5s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .mode-toggle:hover {
+      background: var(--gold);
+      color: var(--navy);
+      transform: rotate(15deg) scale(1.08);
+    }
+    .mode-icon {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      transition: opacity 0.5s var(--ease-spring), transform 0.5s var(--ease-spring);
+    }
+    .sun-icon { opacity: 1; transform: rotate(0deg) scale(1); }
+    .wave-icon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+    body.coastal .sun-icon { opacity: 0; transform: rotate(90deg) scale(0.5); }
+    body.coastal .wave-icon { opacity: 1; transform: rotate(0deg) scale(1); }
+
+    /* ============================================
+       COASTAL MODE (dark) — membership form overrides
+       ============================================ */
+    body { transition: background 0.7s var(--ease-out), color 0.7s var(--ease-out); }
+    body.coastal {
+      background: linear-gradient(180deg, #0B2545 0%, #133B66 50%, #0B2545 100%);
+      background-attachment: fixed;
+      color: var(--cream);
+    }
+    body.coastal h1, body.coastal h2, body.coastal h3 { color: var(--cream); }
+
+    /* Header */
+    body.coastal .form-header {
+      background: rgba(11, 37, 69, 0.88);
+      border-bottom-color: rgba(143, 180, 216, 0.15);
+    }
+    body.coastal .form-logo-text { color: var(--cream); }
+    body.coastal .form-logo img {
+      filter: brightness(0) saturate(100%) invert(81%) sepia(48%) saturate(471%) hue-rotate(347deg) brightness(101%) contrast(94%);
+      opacity: 0.96;
+    }
+    body.coastal .form-close {
+      color: #B8D4F1;
+    }
+    body.coastal .form-close:hover { background: rgba(143, 180, 216, 0.1); color: var(--cream); }
+    body.coastal .mode-toggle {
+      background: rgba(143, 180, 216, 0.1);
+      border-color: rgba(143, 180, 216, 0.2);
+      color: var(--cream);
+    }
+    body.coastal .mode-toggle:hover {
+      background: #F4D58D;
+      color: #0B2545;
+    }
+
+    /* Progress bar */
+    body.coastal .progress { background: rgba(143, 180, 216, 0.15); }
+    body.coastal .progress-fill { background: linear-gradient(90deg, #6BC8AC, #F4D58D); }
+
+    /* Step content */
+    body.coastal .step-eyebrow {
+      background: rgba(107, 200, 172, 0.18);
+      color: #6BC8AC;
+    }
+    body.coastal .step .step-sub { color: #B8D4F1; }
+
+    /* Inputs */
+    body.coastal .input-large {
+      background: rgba(143, 180, 216, 0.08);
+      border-color: rgba(143, 180, 216, 0.2);
+      color: var(--cream);
+    }
+    body.coastal .input-large::placeholder { color: #7BA8D4; }
+    body.coastal .input-large:focus {
+      border-color: #6BC8AC;
+      background: rgba(143, 180, 216, 0.15);
+      box-shadow: 0 0 0 4px rgba(107, 200, 172, 0.15);
+    }
+    body.coastal .input-hint { color: #B8D4F1; }
+
+    /* Address autocomplete */
+    body.coastal .autocomplete-list {
+      background: #133B66;
+      border-color: #6BC8AC;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+    body.coastal .autocomplete-item {
+      color: var(--cream);
+      border-bottom-color: rgba(143, 180, 216, 0.1);
+    }
+    body.coastal .autocomplete-item:hover,
+    body.coastal .autocomplete-item.highlighted {
+      background: rgba(107, 200, 172, 0.18);
+    }
+    body.coastal .autocomplete-item .pin { color: #6BC8AC; }
+    body.coastal .autocomplete-item .addr-text strong { color: var(--cream); }
+    body.coastal .autocomplete-item .addr-text span { color: #B8D4F1; }
+    body.coastal .autocomplete-loading { color: #B8D4F1; }
+    body.coastal .autocomplete-loading::before {
+      border-color: rgba(107, 200, 172, 0.3);
+      border-top-color: #6BC8AC;
+    }
+    body.coastal .autocomplete-empty { color: #B8D4F1; }
+
+    /* Option cards (access type, day, time, addons) */
+    body.coastal .option-card {
+      background: rgba(143, 180, 216, 0.08);
+      border-color: rgba(143, 180, 216, 0.2);
+    }
+    body.coastal .option-card:hover {
+      border-color: #6BC8AC;
+      background: rgba(143, 180, 216, 0.12);
+    }
+    body.coastal .option-card.selected {
+      background: rgba(107, 200, 172, 0.2);
+      border-color: #6BC8AC;
+      box-shadow: 0 8px 20px rgba(107, 200, 172, 0.25);
+    }
+    body.coastal .option-card.selected::after { background: #6BC8AC; color: #0B2545; }
+    body.coastal .option-text strong { color: var(--cream); }
+    body.coastal .option-text span { color: #B8D4F1; }
+
+    /* Stepper */
+    body.coastal .stepper {
+      background: rgba(143, 180, 216, 0.08);
+      border-color: rgba(143, 180, 216, 0.2);
+    }
+    body.coastal .stepper-btn { background: rgba(107, 200, 172, 0.18); color: #6BC8AC; }
+    body.coastal .stepper-btn:hover { background: #6BC8AC; color: #0B2545; }
+    body.coastal .stepper-value { color: var(--cream); }
+
+    /* Dog cards */
+    body.coastal .dog-card {
+      background: rgba(143, 180, 216, 0.08);
+      border-color: rgba(143, 180, 216, 0.2);
+    }
+    body.coastal .dog-card-title { color: var(--cream); }
+    body.coastal .dog-card label { color: #B8D4F1; }
+
+    /* Size buttons — silhouette images are black PNGs, so we invert + tint in coastal */
+    body.coastal .size-btn {
+      background: rgba(143, 180, 216, 0.08);
+      border-color: rgba(143, 180, 216, 0.2);
+    }
+    body.coastal .size-btn:hover { border-color: #6BC8AC; }
+    body.coastal .size-btn.selected {
+      background: rgba(107, 200, 172, 0.18);
+      border-color: #6BC8AC;
+      box-shadow: 0 6px 16px rgba(107, 200, 172, 0.3);
+    }
+    body.coastal .size-btn.selected::after { background: #6BC8AC; color: #0B2545; }
+    body.coastal .size-dog-art img {
+      filter: brightness(0) invert(0.96);
+      opacity: 0.85;
+    }
+    body.coastal .size-btn:hover .size-dog-art img { opacity: 1; }
+    body.coastal .size-btn.selected .size-dog-art img { filter: brightness(0) saturate(100%) invert(81%) sepia(48%) saturate(471%) hue-rotate(347deg) brightness(101%) contrast(94%); opacity: 1; }
+    body.coastal .size-label { color: var(--cream); }
+    body.coastal .size-btn.selected .size-label { color: #F4D58D; }
+
+    /* Plan card on step 1 */
+    body.coastal .plan-card {
+      background: rgba(143, 180, 216, 0.08);
+      border-color: rgba(143, 180, 216, 0.2);
+    }
+    body.coastal .plan-card.weekly {
+      background: linear-gradient(135deg, #2D6A3E 0%, #1F4F2D 100%);
+      border-color: rgba(244, 213, 141, 0.5);
+    }
+    body.coastal .plan-card.twiceweekly {
+      background: linear-gradient(135deg, #5B3E8C 0%, #38255A 100%);
+      border-color: rgba(244, 213, 141, 0.5);
+    }
+    body.coastal .plan-card-tag {
+      background: rgba(107, 200, 172, 0.2);
+      color: #6BC8AC;
+    }
+    body.coastal .change-plan-link { color: #6BC8AC; }
+    body.coastal .plan-card.weekly .change-plan-link,
+    body.coastal .plan-card.twiceweekly .change-plan-link { color: #F4D58D; }
+
+    /* Summary / Review step */
+    body.coastal .summary-card {
+      background: rgba(143, 180, 216, 0.08);
+      border-color: rgba(143, 180, 216, 0.2);
+    }
+    body.coastal .summary-card-head { border-bottom-color: rgba(143, 180, 216, 0.15); }
+    body.coastal .summary-edit { color: #6BC8AC; }
+    body.coastal .summary-edit:hover { background: rgba(107, 200, 172, 0.18); }
+    body.coastal .summary-row .label { color: #B8D4F1; }
+    body.coastal .summary-row .value { color: var(--cream); }
+
+    /* Total card (already gradient) — boost for dark mode */
+    body.coastal .total-card { box-shadow: 0 16px 40px rgba(45, 106, 62, 0.45); }
+
+    /* Buttons */
+    body.coastal .btn-primary {
+      background: var(--cream);
+      color: #0B2545;
+    }
+    body.coastal .btn-primary:hover:not(:disabled) {
+      background: #F4D58D;
+      color: #0B2545;
+    }
+    body.coastal .btn-secondary {
+      color: var(--cream);
+      border-color: rgba(143, 180, 216, 0.3);
+    }
+    body.coastal .btn-secondary:hover { border-color: var(--cream); background: rgba(143, 180, 216, 0.1); }
+
+    /* Bottom nav bar */
+    body.coastal .step-nav {
+      background: rgba(11, 37, 69, 0.92);
+      border-top-color: rgba(143, 180, 216, 0.15);
+    }
+    body.coastal .back-btn {
+      background: rgba(143, 180, 216, 0.12);
+      color: var(--cream);
+    }
+    body.coastal .back-btn:hover:not(:disabled) {
+      background: #6BC8AC;
+      color: #0B2545;
+    }
+    body.coastal .key-hint { color: #B8D4F1; }
+    body.coastal .key-hint kbd { background: rgba(143, 180, 216, 0.18); color: var(--cream); }
+
+    /* Add-dog dashed button */
+    body.coastal .add-dog-btn {
+      background: rgba(107, 200, 172, 0.12);
+      color: #6BC8AC;
+      border-color: rgba(107, 200, 172, 0.4);
+    }
+    body.coastal .add-dog-btn:hover {
+      background: #6BC8AC;
+      color: #0B2545;
+      border-color: #6BC8AC;
+    }
+
+    /* Success screen — keep green icon but add darker shadow */
+    body.coastal .success-icon { box-shadow: 0 20px 60px rgba(45, 106, 62, 0.6); }
+
+    /* Size grid SIZE button helper text */
+    body.coastal .dog-card label { color: #B8D4F1; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="form-header">
+    <a href="index.html" class="form-logo">
+      <img src="assets/logo.png" alt="The Yard Concierge">
+      <span class="form-logo-text">The Yard Concierge</span>
+    </a>
+    <div class="form-header-right">
+      <button class="mode-toggle" id="modeToggle" aria-label="Toggle Coastal mode" title="Switch to Coastal mode">
+        <svg class="mode-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4.5"/>
+          <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+          <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+          <line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/>
+          <line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/>
+        </svg>
+        <svg class="mode-icon wave-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12 Q5.5 8 9 12 T16 12 T22 12"/>
+          <path d="M2 17 Q5.5 13 9 17 T16 17 T22 17"/>
+          <path d="M2 7 Q5.5 3 9 7 T16 7 T22 7" opacity="0.5"/>
+        </svg>
+      </button>
+      <a href="index.html" class="form-close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        Close
+      </a>
+    </div>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+
+  <!-- FORM -->
+  <main class="form-main">
+
+    <!-- STEP 1 — Plan Confirmation -->
+    <div class="step active" data-step="1" data-key="plan">
+      <span class="step-eyebrow">Step 1</span>
+      <h1>Let's get your yard on the calendar.</h1>
+      <p class="step-sub">Confirm your plan and we'll handle the rest.</p>
+      <div class="step-body">
+        <div class="plan-card" id="planCard">
+          <span class="plan-card-tag" id="planTag">Weekly</span>
+          <h2 id="planTitle">Once a week</h2>
+          <p id="planDesc">For most homes · same day every week</p>
+          <div class="plan-card-price" id="planPrice">$22<small> / visit</small></div>
+          <p class="plan-card-monthly" id="planMonthly">$88 / month</p>
+          <a href="index.html#pricing" class="change-plan-link">Change plan →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 — Name -->
+    <div class="step" data-step="2" data-key="name">
+      <span class="step-eyebrow">Step 2</span>
+      <h1>What's your name?</h1>
+      <p class="step-sub">So we know who to thank in our visit notes.</p>
+      <div class="step-body">
+        <div class="input-row">
+          <input type="text" class="input-large" id="firstName" placeholder="First name" autocomplete="given-name">
+          <input type="text" class="input-large" id="lastName" placeholder="Last name" autocomplete="family-name">
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 — Contact -->
+    <div class="step" data-step="3" data-key="contact">
+      <span class="step-eyebrow">Step 3</span>
+      <h1>How can we reach you?</h1>
+      <p class="step-sub">We'll text you when we arrive and send a photo when we leave. Nothing else, ever.</p>
+      <div class="step-body">
+        <input type="email" class="input-large" id="email" placeholder="you@example.com" autocomplete="email" style="margin-bottom: 12px;">
+        <input type="tel" class="input-large" id="phone" placeholder="(561) 555-0100" autocomplete="tel">
+      </div>
+    </div>
+
+    <!-- STEP 4 — Address (with autocomplete) -->
+    <div class="step" data-step="4" data-key="address">
+      <span class="step-eyebrow">Step 4</span>
+      <h1>Where do we visit?</h1>
+      <p class="step-sub">Start typing — we'll suggest your exact address.</p>
+      <div class="step-body">
+        <div class="autocomplete-wrap">
+          <input type="text" class="input-large" id="street" placeholder="Start typing your address…" autocomplete="off" spellcheck="false" style="margin-bottom: 12px;">
+          <div class="autocomplete-list" id="addrSuggestions" role="listbox" hidden></div>
+        </div>
+        <div class="input-row">
+          <input type="text" class="input-large" id="aptUnit" placeholder="Apt / unit (optional)" autocomplete="address-line2">
+          <input type="text" class="input-large" id="zip" placeholder="Zip code" autocomplete="postal-code" maxlength="5" inputmode="numeric" pattern="[0-9]{5}" style="max-width: 160px;">
+        </div>
+        <p class="input-hint" id="addrHint" style="margin-top: 12px;">📍 Searching addresses across West Palm Beach</p>
+      </div>
+    </div>
+
+    <!-- STEP 5 — Number of dogs -->
+    <div class="step" data-step="5" data-key="dogCount">
+      <span class="step-eyebrow">Step 5</span>
+      <h1>How many dogs do you have?</h1>
+      <p class="step-sub">Up to 2 included in your plan. Extras are $4 / visit.</p>
+      <div class="step-body">
+        <div class="stepper">
+          <button class="stepper-btn" id="dogMinus" type="button">−</button>
+          <span class="stepper-value" id="dogCountValue">1</span>
+          <button class="stepper-btn" id="dogPlus" type="button">+</button>
+        </div>
+        <p class="input-hint" style="text-align: center; margin-top: 16px;" id="dogCountHint">1 dog · included in plan</p>
+      </div>
+    </div>
+
+    <!-- STEP 6 — Dog details (dynamic) -->
+    <div class="step" data-step="6" data-key="dogs">
+      <span class="step-eyebrow">Step 6</span>
+      <h1>Tell us about your pup<span id="dogPluralS">s</span>.</h1>
+      <p class="step-sub">Name and size for each. So we can introduce ourselves properly.</p>
+      <div class="step-body">
+        <div id="dogCardsContainer"></div>
+      </div>
+    </div>
+
+    <!-- STEP 7 — Yard Access -->
+    <div class="step" data-step="7" data-key="access">
+      <span class="step-eyebrow">Step 7</span>
+      <h1>How do we get in?</h1>
+      <p class="step-sub">Pick what fits your yard. We'll text before every visit too.</p>
+      <div class="step-body">
+        <div class="option-grid cols-2" id="accessTypeOptions">
+          <button class="option-card" data-value="side-gate" type="button">
+            <span class="option-emoji">🚪</span>
+            <span class="option-text"><strong>Side gate</strong><span>We let ourselves in</span></span>
+          </button>
+          <button class="option-card" data-value="front-gate" type="button">
+            <span class="option-emoji">🏡</span>
+            <span class="option-text"><strong>Front gate</strong><span>Code or open access</span></span>
+          </button>
+          <button class="option-card" data-value="garage" type="button">
+            <span class="option-emoji">🏠</span>
+            <span class="option-text"><strong>Through garage</strong><span>Code or remote</span></span>
+          </button>
+          <button class="option-card" data-value="other" type="button">
+            <span class="option-emoji">📝</span>
+            <span class="option-text"><strong>Something else</strong><span>You'll explain below</span></span>
+          </button>
+        </div>
+        <input type="text" class="input-large" id="gateCode" placeholder="Gate or door code (optional)" style="margin-top: 14px;">
+        <textarea class="input-large" id="accessNotes" placeholder="Any special instructions? Dog needs to stay inside? Trash bin location? (optional)" style="margin-top: 12px;"></textarea>
+      </div>
+    </div>
+
+    <!-- STEP 8 — Schedule -->
+    <div class="step" data-step="8" data-key="schedule">
+      <span class="step-eyebrow">Step 8</span>
+      <h1>When works best?</h1>
+      <p class="step-sub">Pick your day and time. Same slot every week.</p>
+      <div class="step-body">
+        <label style="display: block; font-size: 13px; font-weight: 600; color: var(--navy-soft); margin-bottom: 8px; letter-spacing: 0.04em;">PREFERRED DAY</label>
+        <div class="option-grid cols-3" id="dayOptions" style="margin-bottom: 20px;">
+          <button class="option-card" data-value="mon" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Mon</strong></span></button>
+          <button class="option-card" data-value="tue" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Tue</strong></span></button>
+          <button class="option-card" data-value="wed" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Wed</strong></span></button>
+          <button class="option-card" data-value="thu" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Thu</strong></span></button>
+          <button class="option-card" data-value="fri" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Fri</strong></span></button>
+          <button class="option-card" data-value="any" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Any day</strong></span></button>
+        </div>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: var(--navy-soft); margin-bottom: 8px; letter-spacing: 0.04em;">TIME WINDOW</label>
+        <div class="option-grid cols-3" id="timeOptions">
+          <button class="option-card" data-value="morning" type="button"><span class="option-emoji">🌅</span><span class="option-text"><strong>Morning</strong><span>8a – 12p</span></span></button>
+          <button class="option-card" data-value="afternoon" type="button"><span class="option-emoji">☀️</span><span class="option-text"><strong>Afternoon</strong><span>12p – 4p</span></span></button>
+          <button class="option-card" data-value="evening" type="button"><span class="option-emoji">🌇</span><span class="option-text"><strong>Evening</strong><span>4p – 7p</span></span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 9 — Add-ons -->
+    <div class="step" data-step="9" data-key="addons">
+      <span class="step-eyebrow">Step 9</span>
+      <h1>Any add-ons?</h1>
+      <p class="step-sub">Optional extras you can toggle anytime.</p>
+      <div class="step-body">
+        <div class="option-grid">
+          <button class="option-card addon" data-value="deodorize" data-price="8" type="button">
+            <span class="option-emoji">🌿</span>
+            <span class="option-text"><strong>Turf deodorize</strong><span>+$8 / visit · Florida humidity insurance</span></span>
+          </button>
+          <button class="option-card addon" data-value="hose" data-price="10" type="button">
+            <span class="option-emoji">💧</span>
+            <span class="option-text"><strong>Hose-down rinse</strong><span>+$10 / visit · We bring water</span></span>
+          </button>
+          <button class="option-card addon" data-value="photos" data-price="0" type="button">
+            <span class="option-emoji">📸</span>
+            <span class="option-text"><strong>Photo proof every visit</strong><span>Free · A photo of your clean yard after each visit</span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 10 — Review -->
+    <div class="step" data-step="10" data-key="review">
+      <span class="step-eyebrow">Almost there</span>
+      <h1>Review and confirm.</h1>
+      <p class="step-sub">Check the details, then we'll get started.</p>
+      <div class="step-body">
+        <div class="total-card">
+          <div class="total-row"><span>Plan</span><span id="reviewPlanName">Weekly · $22/visit</span></div>
+          <div class="total-row"><span>Extra dogs</span><span id="reviewExtraDogs">+$0</span></div>
+          <div class="total-row"><span>Add-ons</span><span id="reviewAddons">None</span></div>
+          <div class="total-row total"><span>Monthly total</span><span class="price" id="reviewTotal">$88</span></div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-card-head"><h3>Contact</h3><button class="summary-edit" type="button" data-edit="2">Edit</button></div>
+          <div class="summary-row"><span class="label">Name</span><span class="value" id="reviewName">—</span></div>
+          <div class="summary-row"><span class="label">Email</span><span class="value" id="reviewEmail">—</span></div>
+          <div class="summary-row"><span class="label">Phone</span><span class="value" id="reviewPhone">—</span></div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-card-head"><h3>Address</h3><button class="summary-edit" type="button" data-edit="4">Edit</button></div>
+          <div class="summary-row"><span class="label">Street</span><span class="value" id="reviewStreet">—</span></div>
+          <div class="summary-row"><span class="label">Zip</span><span class="value" id="reviewZip">—</span></div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-card-head"><h3>Dogs</h3><button class="summary-edit" type="button" data-edit="6">Edit</button></div>
+          <div id="reviewDogsList"></div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-card-head"><h3>Schedule</h3><button class="summary-edit" type="button" data-edit="8">Edit</button></div>
+          <div class="summary-row"><span class="label">Day</span><span class="value" id="reviewDay">—</span></div>
+          <div class="summary-row"><span class="label">Time</span><span class="value" id="reviewTime">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 11 — Success -->
+    <div class="step" data-step="11" data-key="success">
+      <div class="success-screen">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h1>Welcome to the family! 🐾</h1>
+        <p class="step-sub" style="font-size: 19px; max-width: 480px; margin-left: auto; margin-right: auto;">
+          We'll text you within 24 hours to confirm your first visit. First cleanup is on us — at <strong>50% off</strong>.
+        </p>
+        <div style="margin-top: 32px;">
+          <a href="index.html" class="btn btn-gold">Back to the homepage</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- STEP NAVIGATION -->
+  <div class="step-nav" id="stepNav">
+    <div class="step-nav-inner">
+      <button class="back-btn" id="backBtn" disabled aria-label="Previous step">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="btn btn-primary next-btn" id="nextBtn">
+        Continue
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <span class="key-hint"><kbd>Enter</kbd> next</span>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // COASTAL MODE TOGGLE — shares localStorage key with index.html
+    // ============================================
+    (function setupModeToggle() {
+      const btn = document.getElementById('modeToggle');
+      if (!btn) return;
+      const saved = localStorage.getItem('yc-mode');
+      if (saved === 'coastal') {
+        document.body.classList.add('coastal');
+        btn.setAttribute('title', 'Switch to Sunshine mode');
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0B2545');
+      }
+      btn.addEventListener('click', () => {
+        document.body.classList.toggle('coastal');
+        const isCoastal = document.body.classList.contains('coastal');
+        localStorage.setItem('yc-mode', isCoastal ? 'coastal' : 'sunshine');
+        btn.setAttribute('title', isCoastal ? 'Switch to Sunshine mode' : 'Switch to Coastal mode');
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isCoastal ? '#0B2545' : '#FAF6EE');
+      });
+    })();
+
+    // ============================================
+    // STATE
+    // ============================================
+    const PLANS = {
+      biweekly: { name: 'Bi-Weekly', title: 'Every other week', desc: 'For lighter needs · 2 visits per month', price: 30, monthly: 60, visitsPerMonth: 2 },
+      weekly: { name: 'Weekly', title: 'Once a week', desc: 'For most homes · same day every week', price: 22, monthly: 88, visitsPerMonth: 4 },
+      twiceweekly: { name: 'Twice-Weekly', title: 'Two times a week', desc: 'For big yards or multi-dog homes', price: 18, monthly: 144, visitsPerMonth: 8 }
+    };
+
+    const state = {
+      plan: 'weekly',
+      firstName: '', lastName: '', email: '', phone: '',
+      street: '', aptUnit: '', zip: '',
+      dogCount: 1,
+      dogs: [{ name: '', breed: '', size: '' }],
+      accessType: '', gateCode: '', accessNotes: '',
+      day: '', time: '',
+      addons: []
+    };
+
+    const TOTAL_STEPS = 10; // step 11 is success
+    let currentStep = 1;
+
+    // Read plan from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const planParam = urlParams.get('plan');
+    if (planParam && PLANS[planParam]) state.plan = planParam;
+
+    // ============================================
+    // ELEMENTS
+    // ============================================
+    const steps = document.querySelectorAll('.step');
+    const backBtn = document.getElementById('backBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressFill = document.getElementById('progressFill');
+    const stepNav = document.getElementById('stepNav');
+
+    // Plan card
+    const planCard = document.getElementById('planCard');
+    const planTag = document.getElementById('planTag');
+    const planTitle = document.getElementById('planTitle');
+    const planDesc = document.getElementById('planDesc');
+    const planPrice = document.getElementById('planPrice');
+    const planMonthly = document.getElementById('planMonthly');
+
+    function paintPlanCard() {
+      const p = PLANS[state.plan];
+      planCard.className = 'plan-card ' + state.plan;
+      planTag.textContent = p.name;
+      planTitle.textContent = p.title;
+      planDesc.textContent = p.desc;
+      planPrice.innerHTML = '$' + p.price + '<small> / visit</small>';
+      planMonthly.textContent = '$' + p.monthly + ' / month · included up to 2 dogs';
+    }
+    paintPlanCard();
+
+    // ============================================
+    // STEP NAVIGATION
+    // ============================================
+    function showStep(n) {
+      if (n < 1 || n > TOTAL_STEPS + 1) return;
+      steps.forEach(s => {
+        const i = parseInt(s.dataset.step);
+        s.classList.remove('active', 'prev');
+        if (i === n) s.classList.add('active');
+        else if (i < n) s.classList.add('prev');
+      });
+      currentStep = n;
+      progressFill.style.width = ((n - 1) / TOTAL_STEPS * 100) + '%';
+      backBtn.disabled = n === 1;
+      backBtn.style.opacity = n === 1 ? '0.3' : '1';
+
+      // Hide nav on success screen
+      stepNav.style.display = n > TOTAL_STEPS ? 'none' : 'flex';
+
+      // Change button text on review step
+      if (n === 10) {
+        nextBtn.innerHTML = 'Confirm and become a member <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><polyline points="9 18 15 12 9 6"/></svg>';
+        nextBtn.classList.remove('btn-primary');
+        nextBtn.classList.add('btn-gold');
+        renderReview();
+      } else {
+        nextBtn.innerHTML = 'Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><polyline points="9 18 15 12 9 6"/></svg>';
+        nextBtn.classList.remove('btn-gold');
+        nextBtn.classList.add('btn-primary');
+      }
+
+      // Render dogs on step 6
+      if (n === 6) renderDogCards();
+
+      // Restart entry animations
+      const active = document.querySelector('.step.active');
+      if (active) {
+        const eyebrow = active.querySelector('.step-eyebrow');
+        const h1 = active.querySelector('h1');
+        const sub = active.querySelector('.step-sub');
+        const body = active.querySelector('.step-body');
+        [eyebrow, h1, sub, body].forEach(el => {
+          if (el) {
+            el.style.animation = 'none';
+            void el.offsetWidth; // reflow
+            el.style.animation = '';
+          }
+        });
+      }
+
+      // Focus first input
+      setTimeout(() => {
+        const input = active?.querySelector('input:not([type=hidden]), textarea');
+        if (input) input.focus();
+      }, 400);
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function validateStep(n) {
+      if (n === 2) return state.firstName.trim() && state.lastName.trim();
+      if (n === 3) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+      if (n === 4) return state.street.trim() && /^\d{5}$/.test(state.zip);
+      if (n === 5) return state.dogCount >= 1;
+      if (n === 6) return state.dogs.every(d => d.name.trim() && d.size);
+      if (n === 7) return state.accessType;
+      if (n === 8) return state.day && state.time;
+      return true;
+    }
+
+    function next() {
+      if (!validateStep(currentStep)) {
+        // Shake animation on invalid
+        const active = document.querySelector('.step.active');
+        active.style.animation = 'shake 0.4s';
+        setTimeout(() => active.style.animation = '', 400);
+        return;
+      }
+      if (currentStep === 10) {
+        confettiBurst();
+        showStep(11);
+      } else if (currentStep < TOTAL_STEPS) {
+        showStep(currentStep + 1);
+      }
+    }
+
+    function back() {
+      if (currentStep > 1) showStep(currentStep - 1);
+    }
+
+    backBtn.addEventListener('click', back);
+    nextBtn.addEventListener('click', next);
+
+    // Enter to advance
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && currentStep <= TOTAL_STEPS) {
+        if (e.target.tagName === 'TEXTAREA') return;
+        if (e.target.tagName === 'BUTTON') return;
+        e.preventDefault();
+        next();
+      }
+    });
+
+    // ============================================
+    // INPUT BINDING
+    // ============================================
+    document.getElementById('firstName').addEventListener('input', e => state.firstName = e.target.value);
+    document.getElementById('lastName').addEventListener('input', e => state.lastName = e.target.value);
+    document.getElementById('email').addEventListener('input', e => state.email = e.target.value);
+    document.getElementById('phone').addEventListener('input', e => state.phone = e.target.value);
+    // === Address autocomplete (Nominatim, bounded to West Palm Beach) ===
+    const streetInput = document.getElementById('street');
+    const suggestionsList = document.getElementById('addrSuggestions');
+    const zipInput = document.getElementById('zip');
+    const addrHint = document.getElementById('addrHint');
+    // WPB bounding box: roughly (west, north, east, south)
+    const WPB_VIEWBOX = '-80.20,26.85,-80.00,26.62';
+    let searchTimer = null;
+    let lastQuery = '';
+    let highlightIdx = -1;
+    let currentSuggestions = [];
+
+    function showSuggestions(items) {
+      suggestionsList.innerHTML = '';
+      currentSuggestions = items;
+      highlightIdx = -1;
+      if (!items.length) {
+        suggestionsList.innerHTML = '<div class="autocomplete-empty">No matches in West Palm Beach. Keep typing or enter manually.</div>';
+        suggestionsList.hidden = false;
+        return;
+      }
+      items.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = 'autocomplete-item';
+        el.setAttribute('role', 'option');
+        el.dataset.index = i;
+        const street = item.address?.house_number
+          ? (item.address.house_number + ' ' + (item.address.road || ''))
+          : (item.address?.road || item.display_name.split(',')[0]);
+        const cityState = [item.address?.city || item.address?.town || item.address?.suburb, item.address?.state_code || 'FL', item.address?.postcode].filter(Boolean).join(' · ');
+        el.innerHTML = `
+          <svg class="pin" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
+          <div class="addr-text">
+            <strong>${street.trim() || item.display_name.split(',')[0]}</strong>
+            <span>${cityState}</span>
+          </div>
+        `;
+        el.addEventListener('click', () => selectAddress(item));
+        suggestionsList.appendChild(el);
+      });
+      suggestionsList.hidden = false;
+    }
+
+    function selectAddress(item) {
+      const houseAndRoad = item.address?.house_number
+        ? (item.address.house_number + ' ' + (item.address.road || ''))
+        : (item.address?.road || item.display_name.split(',')[0]);
+      streetInput.value = houseAndRoad.trim();
+      state.street = houseAndRoad.trim();
+      if (item.address?.postcode) {
+        zipInput.value = item.address.postcode;
+        state.zip = item.address.postcode;
+      }
+      suggestionsList.hidden = true;
+      addrHint.textContent = '✓ Address selected · ' + (item.address?.city || item.address?.town || 'West Palm Beach') + ' ' + (item.address?.postcode || '');
+      addrHint.style.color = 'var(--green-deep)';
+    }
+
+    async function fetchAddresses(query) {
+      if (!query || query.length < 3) {
+        suggestionsList.hidden = true;
+        return;
+      }
+      suggestionsList.innerHTML = '<div class="autocomplete-loading">Searching addresses…</div>';
+      suggestionsList.hidden = false;
+      try {
+        // Add ", West Palm Beach, FL" to help relevance
+        const q = encodeURIComponent(query + ', West Palm Beach, FL');
+        const url = `https://nominatim.openstreetmap.org/search?q=${q}&format=json&addressdetails=1&limit=6&countrycodes=us&viewbox=${WPB_VIEWBOX}&bounded=1`;
+        const resp = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+        const items = await resp.json();
+        if (query !== lastQuery) return; // stale response
+        showSuggestions(items);
+      } catch (e) {
+        suggestionsList.innerHTML = '<div class="autocomplete-empty">Search unavailable — enter your address manually.</div>';
+      }
+    }
+
+    streetInput.addEventListener('input', e => {
+      state.street = e.target.value;
+      lastQuery = e.target.value.trim();
+      addrHint.style.color = '';
+      addrHint.textContent = '📍 Searching addresses across West Palm Beach';
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => fetchAddresses(lastQuery), 350);
+    });
+
+    streetInput.addEventListener('keydown', e => {
+      if (suggestionsList.hidden || !currentSuggestions.length) return;
+      const items = suggestionsList.querySelectorAll('.autocomplete-item');
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        highlightIdx = (highlightIdx + 1) % items.length;
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        highlightIdx = (highlightIdx - 1 + items.length) % items.length;
+      } else if (e.key === 'Enter' && highlightIdx >= 0) {
+        e.preventDefault();
+        e.stopPropagation();
+        selectAddress(currentSuggestions[highlightIdx]);
+        return;
+      } else if (e.key === 'Escape') {
+        suggestionsList.hidden = true;
+        return;
+      } else {
+        return;
+      }
+      items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightIdx));
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.autocomplete-wrap')) suggestionsList.hidden = true;
+    });
+    document.getElementById('aptUnit').addEventListener('input', e => state.aptUnit = e.target.value);
+    document.getElementById('zip').addEventListener('input', e => state.zip = e.target.value);
+    document.getElementById('gateCode').addEventListener('input', e => state.gateCode = e.target.value);
+    document.getElementById('accessNotes').addEventListener('input', e => state.accessNotes = e.target.value);
+
+    // ============================================
+    // DOG COUNT STEPPER
+    // ============================================
+    const dogValue = document.getElementById('dogCountValue');
+    const dogHint = document.getElementById('dogCountHint');
+    document.getElementById('dogMinus').addEventListener('click', () => {
+      if (state.dogCount > 1) {
+        state.dogCount--;
+        state.dogs.pop();
+        updateDogStepper();
+      }
+    });
+    document.getElementById('dogPlus').addEventListener('click', () => {
+      if (state.dogCount < 6) {
+        state.dogCount++;
+        state.dogs.push({ name: '', breed: '', size: '' });
+        updateDogStepper();
+      }
+    });
+    function updateDogStepper() {
+      dogValue.textContent = state.dogCount;
+      dogValue.classList.remove('bump');
+      void dogValue.offsetWidth;
+      dogValue.classList.add('bump');
+      const extra = Math.max(0, state.dogCount - 2);
+      const hint = state.dogCount === 1
+        ? '1 dog · included in plan'
+        : state.dogCount === 2
+        ? '2 dogs · included in plan'
+        : state.dogCount + ' dogs · +$' + (extra * 4) + ' / visit for ' + extra + ' extra';
+      dogHint.textContent = hint;
+      document.getElementById('dogPluralS').style.display = state.dogCount === 1 ? 'none' : 'inline';
+    }
+    updateDogStepper();
+
+    // ============================================
+    // DOG CARDS (step 6)
+    // ============================================
+    // Dog size options — cropped from user-provided size template
+    const SIZES = [
+      { label: 'S',  img: 'assets/breeds/size_s.png'  },
+      { label: 'M',  img: 'assets/breeds/size_m.png'  },
+      { label: 'L',  img: 'assets/breeds/size_l.png'  },
+      { label: 'XL', img: 'assets/breeds/size_xl.png' }
+    ];
+
+    function renderDogCards() {
+      const c = document.getElementById('dogCardsContainer');
+      c.innerHTML = '';
+      state.dogs.forEach((dog, i) => {
+        const card = document.createElement('div');
+        card.className = 'dog-card';
+        card.style.animationDelay = (i * 0.08) + 's';
+        card.innerHTML = `
+          <div class="dog-card-header">
+            <div class="dog-card-title">🐶 Dog ${i + 1}</div>
+          </div>
+          <input type="text" class="input-large" placeholder="Name (e.g., Biscuit)" value="${dog.name}" data-i="${i}" data-field="name">
+          <input type="text" class="input-large" placeholder="Breed (optional)" value="${dog.breed}" data-i="${i}" data-field="breed">
+          <label style="margin-top: 8px;">SIZE — TAP TO PICK</label>
+          <div class="size-grid">
+            ${SIZES.map(s => `
+              <button type="button" class="size-btn ${dog.size === s.label ? 'selected' : ''}" data-i="${i}" data-size="${s.label}">
+                <div class="size-dog-art"><img src="${s.img}" alt="" draggable="false"></div>
+                <div class="size-label">${s.label}</div>
+              </button>
+            `).join('')}
+          </div>
+        `;
+        c.appendChild(card);
+      });
+      c.querySelectorAll('input[data-i]').forEach(input => {
+        input.addEventListener('input', e => {
+          const i = parseInt(e.target.dataset.i);
+          const f = e.target.dataset.field;
+          state.dogs[i][f] = e.target.value;
+        });
+      });
+      c.querySelectorAll('.size-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const target = e.currentTarget;
+          const i = parseInt(target.dataset.i);
+          const s = target.dataset.size;
+          state.dogs[i].size = s;
+          c.querySelectorAll('.size-btn[data-i="' + i + '"]').forEach(b => b.classList.remove('selected'));
+          target.classList.add('selected');
+        });
+      });
+    }
+
+    // ============================================
+    // OPTION CARDS (access, day, time, addons)
+    // ============================================
+    function setupSingleSelect(containerId, stateKey) {
+      const container = document.getElementById(containerId);
+      container.querySelectorAll('.option-card').forEach(card => {
+        card.addEventListener('click', () => {
+          container.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          state[stateKey] = card.dataset.value;
+        });
+      });
+    }
+    setupSingleSelect('accessTypeOptions', 'accessType');
+    setupSingleSelect('dayOptions', 'day');
+    setupSingleSelect('timeOptions', 'time');
+
+    // Addons multi-select
+    document.querySelectorAll('.option-card.addon').forEach(card => {
+      card.addEventListener('click', () => {
+        const v = card.dataset.value;
+        if (card.classList.contains('selected')) {
+          card.classList.remove('selected');
+          state.addons = state.addons.filter(a => a !== v);
+        } else {
+          card.classList.add('selected');
+          state.addons.push(v);
+        }
+      });
+    });
+
+    // ============================================
+    // REVIEW
+    // ============================================
+    function renderReview() {
+      const p = PLANS[state.plan];
+      const extra = Math.max(0, state.dogCount - 2);
+      const extraCost = extra * 4 * p.visitsPerMonth;
+      const addonCosts = state.addons.map(a => {
+        const el = document.querySelector('.option-card.addon[data-value="' + a + '"]');
+        return parseFloat(el?.dataset.price || 0) * p.visitsPerMonth;
+      });
+      const addonsCost = addonCosts.reduce((s, c) => s + c, 0);
+      const total = p.monthly + extraCost + addonsCost;
+
+      document.getElementById('reviewPlanName').textContent = p.name + ' · $' + p.price + '/visit';
+      document.getElementById('reviewExtraDogs').textContent = extra === 0 ? '+$0' : '+$' + extraCost + '/mo';
+      document.getElementById('reviewAddons').textContent = state.addons.length === 0 ? 'None' : '+$' + addonsCost + '/mo';
+      document.getElementById('reviewTotal').textContent = '$' + total;
+      document.getElementById('reviewName').textContent = (state.firstName + ' ' + state.lastName).trim() || '—';
+      document.getElementById('reviewEmail').textContent = state.email || '—';
+      document.getElementById('reviewPhone').textContent = state.phone || '—';
+      document.getElementById('reviewStreet').textContent = state.street + (state.aptUnit ? ', ' + state.aptUnit : '');
+      document.getElementById('reviewZip').textContent = state.zip || '—';
+      document.getElementById('reviewDay').textContent = state.day === 'any' ? 'Any weekday' : state.day.charAt(0).toUpperCase() + state.day.slice(1);
+      const tLabel = { morning: 'Morning · 8a–12p', afternoon: 'Afternoon · 12p–4p', evening: 'Evening · 4p–7p' }[state.time] || '—';
+      document.getElementById('reviewTime').textContent = tLabel;
+      document.getElementById('reviewDogsList').innerHTML = state.dogs.map((d, i) =>
+        `<div class="summary-row"><span class="label">${d.name || 'Dog ' + (i + 1)}</span><span class="value">${d.size ? 'Size ' + d.size : ''}${d.breed ? ' · ' + d.breed : ''}</span></div>`
+      ).join('');
+    }
+
+    // Edit buttons in review
+    document.querySelectorAll('.summary-edit').forEach(btn => {
+      btn.addEventListener('click', () => showStep(parseInt(btn.dataset.edit)));
+    });
+
+    // ============================================
+    // CONFETTI
+    // ============================================
+    function confettiBurst() {
+      const colors = ['#E5B048', '#2D6A3E', '#5B3E8C', '#F4D58D', '#6BC8AC'];
+      const container = document.createElement('div');
+      container.className = 'confetti';
+      document.body.appendChild(container);
+      for (let i = 0; i < 80; i++) {
+        const c = document.createElement('span');
+        c.style.left = Math.random() * 100 + '%';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animationDelay = (Math.random() * 0.5) + 's';
+        c.style.animationDuration = (2 + Math.random() * 1.5) + 's';
+        c.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        container.appendChild(c);
+      }
+      setTimeout(() => container.remove(), 4000);
+    }
+
+    // Shake animation injection
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20% { transform: translateX(-8px); }
+        40% { transform: translateX(8px); }
+        60% { transform: translateX(-6px); }
+        80% { transform: translateX(6px); }
+      }
+    `;
+    document.head.appendChild(styleSheet);
+
+    // Init
+    showStep(1);
+  </script>
+</body>
+</html>

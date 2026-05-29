@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 80" width="1em" height="1em">
+  <!-- Sausage dog silhouette — solid filled shapes -->
+  <g fill="#8B5A3C">
+    <!-- Long body (the iconic sausage shape) -->
+    <ellipse cx="68" cy="40" rx="44" ry="12"/>
+    <!-- Chest expansion -->
+    <ellipse cx="38" cy="42" rx="14" ry="10"/>
+    <!-- Hind expansion -->
+    <ellipse cx="98" cy="42" rx="12" ry="9"/>
+    <!-- Head -->
+    <ellipse cx="22" cy="28" rx="11" ry="9"/>
+    <!-- Long snout -->
+    <ellipse cx="8" cy="32" rx="7" ry="4"/>
+    <!-- Floppy drop ear -->
+    <path d="M15 28 Q9 32 11 42 Q14 46 19 42 Q22 36 20 30 Z"/>
+    <!-- Neck connection -->
+    <path d="M26 32 Q30 36 32 42 L36 38 Z"/>
+    <!-- Front leg 1 -->
+    <path d="M30 50 Q29 58 30 62 L34 62 Q35 58 34 50 Z"/>
+    <!-- Front leg 2 (slightly further) -->
+    <path d="M40 50 Q39 58 40 62 L44 62 Q45 58 44 50 Z"/>
+    <!-- Back leg 1 -->
+    <path d="M92 50 Q91 58 92 62 L96 62 Q97 58 96 50 Z"/>
+    <!-- Back leg 2 -->
+    <path d="M102 50 Q101 58 102 62 L106 62 Q107 58 106 50 Z"/>
+    <!-- Tail (lifted, pointed) -->
+    <path d="M108 32 Q116 24 122 20 Q120 26 116 30 Z"/>
+    <!-- Tiny tail tip detail -->
+    <ellipse cx="115" cy="22" rx="1.5" ry="1.5"/>
+  </g>
+  <!-- Belly highlight (lighter brown for depth) -->
+  <ellipse cx="68" cy="48" rx="36" ry="4" fill="#C68B5C" opacity="0.5"/>
+  <!-- Eye -->
+  <circle cx="24" cy="27" r="1.4" fill="#1B1B1B"/>
+  <!-- Nose -->
+  <ellipse cx="4" cy="32" rx="2" ry="1.5" fill="#1B1B1B"/>
+  <!-- Collar -->
+  <rect x="28" y="36" width="6" height="3" fill="#B8413E"/>
+  <!-- Collar tag -->
+  <circle cx="32" cy="40" r="1.2" fill="#E5B048"/>
+</svg>
