@@ -63,7 +63,9 @@ module.exports = async (req, res) => {
           preferredDayLabel: DAY_LABEL[meta.preferredDay] || meta.preferredDay,
           preferredTime: meta.preferredTime || '',
           preferredTimeLabel: fmtSlot(meta.preferredTime),
-          visits: visitsLog
+          visits: visitsLog,
+          lastPhotoUrl: meta.lastPhotoUrl || '',
+          lastPhotoAt: meta.lastPhotoAt || ''
         });
       }
 

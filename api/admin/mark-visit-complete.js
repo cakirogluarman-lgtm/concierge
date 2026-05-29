@@ -47,6 +47,16 @@ module.exports = async (req, res) => {
       metadata: { ...meta, visits: updatedVisitsStr }
     });
 
+    // Photo (uploaded today via /api/admin/upload-photo) → embedded in email
+    const photoUrl = meta.lastPhotoUrl || '';
+    const photoIsRecent = meta.lastPhotoAt
+      && (Date.now() - new Date(meta.lastPhotoAt).getTime() < 24 * 60 * 60 * 1000);
+    const photoBlock = (photoUrl && photoIsRecent) ? `
+    <tr><td style="padding:0 32px 24px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#5A6580;margin-bottom:10px;">Today's visit · proof</div>
+      <img src="${photoUrl}" alt="Your clean yard" style="display:block;width:100%;max-width:456px;border-radius:14px;border:1px solid rgba(27,43,77,0.08);">
+    </td></tr>` : '';
+
     // Send the customer a friendly "we just left" email
     if (customerEmail) {
       const html = `<!DOCTYPE html>
@@ -59,7 +69,10 @@ module.exports = async (req, res) => {
     <tr><td style="padding:28px 32px 8px;font-size:15.5px;">
       <p>Hi ${escapeHtml(firstName)},</p>
       <p>Just wanted to let you know — your visit is complete. The yard's been scooped, double-bagged, and we're on to the next one. ${escapeHtml(dogPhrase)} can run wild again.</p>
-      <p style="color:#5A6580;font-size:14.5px;margin-top:18px;">If anything looks off, hit reply and we'll come back same-day. Otherwise, see you next visit.</p>
+    </td></tr>
+    ${photoBlock}
+    <tr><td style="padding:0 32px 24px;font-size:14.5px;color:#5A6580;">
+      If anything looks off, hit reply and we'll come back same-day. Otherwise, see you next visit.
     </td></tr>
     <tr><td style="padding:0 32px 28px;">
       <div style="border-top:1px solid rgba(27,43,77,0.08);padding-top:18px;font-size:13px;color:#5A6580;text-align:center;">
@@ -73,7 +86,7 @@ module.exports = async (req, res) => {
       await resend.emails.send({
         from: 'The Yard Concierge <onboarding@resend.dev>',
         to: [customerEmail],
-        subject: '🐾 Your yard is sparkling clean!',
+        subject: photoBlock ? '🐾 Your yard is sparkling clean (photo inside)' : '🐾 Your yard is sparkling clean!',
         html
       });
     }

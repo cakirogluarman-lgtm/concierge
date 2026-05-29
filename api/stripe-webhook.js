@@ -106,7 +106,7 @@ async function handleNewSubscription(subscription) {
       ${meta.accessNotes ? `<div style="margin-top:10px;font-size:14px;color:#5A6580;font-style:italic;">"${escape(meta.accessNotes)}"</div>` : ''}
 
       <h2 style="font-size:14px;letter-spacing:0.1em;text-transform:uppercase;color:#5A6580;margin:24px 0 12px;">Schedule</h2>
-      <div style="font-size:15px;"><strong>${escape((meta.preferredDay || '').replace('any', 'Any weekday') || '—')}</strong> · ${escape((meta.preferredTime || '').replace('morning', 'Morning (8a–12p)').replace('afternoon', 'Afternoon (12–4p)').replace('evening', 'Evening (4–7p)') || '—')}</div>
+      <div style="font-size:15px;"><strong>${escape(formatDay(meta.preferredDay))}</strong> · ${escape(formatTime(meta.preferredTime))}</div>
 
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:32px;width:100%;">
         <tr><td align="center">
@@ -168,4 +168,17 @@ function escape(s) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function formatDay(d) {
+  const map = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' };
+  return map[(d || '').toLowerCase()] || (d || '—');
+}
+
+function formatTime(t) {
+  if (!t || !/^\d{1,2}:\d{2}$/.test(t)) return t || '—';
+  const [h, m] = t.split(':').map(Number);
+  const period = h >= 12 ? 'PM' : 'AM';
+  const hh = h % 12 === 0 ? 12 : h % 12;
+  return hh + ':' + String(m).padStart(2,'0') + ' ' + period;
 }
