@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1B2B4D">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin · The Yard Concierge</title>
+  <link rel="icon" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green-deep: #2D6A3E;
+      --green-mid: #4A8E5C;
+      --gold: #E5B048;
+      --gold-deep: #C9A86B;
+      --navy: #1B2B4D;
+      --navy-mid: #2D3F66;
+      --navy-soft: #5A6580;
+      --cream: #FAF6EE;
+      --paper: #FBF8F1;
+      --white: #FFFFFF;
+      --red: #B8413E;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --shadow-sm: 0 2px 8px rgba(27,43,77,0.06);
+      --shadow-md: 0 8px 24px rgba(27,43,77,0.08);
+      --shadow-lg: 0 20px 50px rgba(27,43,77,0.14);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px; line-height: 1.5;
+      color: var(--navy); background: var(--paper);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 700; letter-spacing: -0.02em; color: var(--navy); }
+
+    /* ====== LOGIN SCREEN ====== */
+    .login-wrap {
+      min-height: 100vh;
+      display: grid; place-items: center;
+      padding: 24px;
+      background: linear-gradient(180deg, var(--cream) 0%, var(--paper) 100%);
+    }
+    .login-card {
+      width: 100%; max-width: 380px;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 36px 30px;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+    .login-card img { width: 64px; margin: 0 auto 18px; }
+    .login-card h1 { font-size: 22px; margin-bottom: 6px; }
+    .login-card p { color: var(--navy-soft); font-size: 13.5px; margin-bottom: 24px; }
+    .login-card input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid rgba(27,43,77,0.12);
+      border-radius: 12px;
+      font: inherit;
+      font-size: 17px;
+      text-align: center;
+      letter-spacing: 0.4em;
+      background: var(--paper);
+      color: var(--navy);
+      transition: border-color .2s;
+    }
+    .login-card input:focus { outline: none; border-color: var(--green-deep); background: var(--white); }
+    .login-card button {
+      margin-top: 14px;
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--green-deep);
+      color: var(--cream);
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 15px;
+      transition: transform .15s, box-shadow .2s;
+    }
+    .login-card button:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(45,106,62,0.32); }
+    .login-card button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .login-err { color: var(--red); font-size: 13px; margin-top: 12px; min-height: 16px; }
+
+    /* ====== DASHBOARD ====== */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--white);
+      border-bottom: 1px solid rgba(27,43,77,0.08);
+      padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-left img { width: 36px; height: 36px; }
+    .topbar-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; line-height: 1.1; }
+    .topbar-title small { display: block; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: var(--navy-soft); }
+    .refresh-btn, .logout-btn {
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid rgba(27,43,77,0.12);
+      transition: background .15s;
+    }
+    .refresh-btn:hover, .logout-btn:hover { background: var(--paper); }
+    .topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px 80px; }
+    .section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+    .section-head h2 { font-size: 19px; }
+    .section-head .count { color: var(--navy-soft); font-size: 13px; font-weight: 500; }
+    section + section { margin-top: 36px; }
+
+    /* TODAY CARDS */
+    .today-empty {
+      text-align: center;
+      padding: 36px 20px;
+      background: var(--white);
+      border-radius: var(--radius-md);
+      color: var(--navy-soft);
+      font-size: 14px;
+      border: 1px dashed rgba(27,43,77,0.14);
+    }
+    .today-empty .icon { font-size: 32px; display: block; margin-bottom: 8px; }
+    .today-list { display: flex; flex-direction: column; gap: 10px; }
+    .today-card {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+      border-left: 4px solid var(--green-deep);
+    }
+    .today-card.done { border-left-color: var(--gold); opacity: 0.7; }
+    .today-time {
+      flex: none;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 17px;
+      width: 78px;
+      color: var(--navy);
+    }
+    .today-info { flex: 1; min-width: 0; }
+    .today-name { font-weight: 700; font-size: 15px; }
+    .today-meta { font-size: 12.5px; color: var(--navy-soft); margin-top: 2px; }
+    .today-actions { display: flex; gap: 6px; align-items: center; flex: none; }
+    .mark-done-btn {
+      padding: 10px 14px;
+      background: var(--green-deep);
+      color: var(--cream);
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+    .mark-done-btn:hover:not(:disabled) { background: var(--navy); transform: translateY(-1px); }
+    .mark-done-btn:disabled { background: var(--gold); cursor: not-allowed; }
+
+    /* MEMBER GRID */
+    .member-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .member-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: transform .15s, box-shadow .2s;
+      border: 1px solid rgba(27,43,77,0.04);
+    }
+    .member-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .member-card.inactive { opacity: 0.5; }
+    .member-card-head {
+      display: flex; gap: 12px; align-items: center; margin-bottom: 10px;
+    }
+    .member-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--green-deep); color: var(--cream);
+      display: grid; place-items: center;
+      font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px;
+      flex: none;
+      background-size: cover; background-position: center;
+    }
+    .member-name { font-weight: 700; font-size: 15px; line-height: 1.2; }
+    .member-name-meta { font-size: 12px; color: var(--navy-soft); margin-top: 2px; }
+    .member-body { font-size: 13px; color: var(--navy-soft); display: flex; flex-direction: column; gap: 4px; }
+    .member-body .row { display: flex; gap: 6px; align-items: center; }
+    .member-body .row svg { width: 13px; height: 13px; flex: none; opacity: 0.5; }
+    .member-body strong { color: var(--navy); font-weight: 600; }
+    .badge {
+      display: inline-block; padding: 3px 8px; border-radius: 999px;
+      font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+      background: rgba(45,106,62,0.12); color: var(--green-deep); margin-right: 4px;
+    }
+    .badge.gold { background: rgba(229,176,72,0.18); color: var(--gold-deep); }
+    .badge.red { background: rgba(184,65,62,0.12); color: var(--red); }
+
+    /* MODAL */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(27,43,77,0.6);
+      display: none; z-index: 100;
+      backdrop-filter: blur(8px);
+      align-items: flex-start; justify-content: center;
+      padding: 24px;
+      overflow-y: auto;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      max-width: 520px; width: 100%;
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
+      margin: auto;
+    }
+    .modal-head { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+    .modal-head .member-avatar { width: 64px; height: 64px; font-size: 24px; }
+    .modal-head h2 { font-size: 22px; line-height: 1.1; }
+    .modal-head .sub { font-size: 13px; color: var(--navy-soft); margin-top: 4px; }
+    .modal-close {
+      margin-left: auto;
+      width: 32px; height: 32px; border-radius: 50%;
+      display: grid; place-items: center;
+      background: var(--paper); color: var(--navy-soft);
+      font-size: 20px; line-height: 1;
+      flex: none;
+    }
+    .modal-section { margin-top: 18px; }
+    .modal-section h3 { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; color: var(--navy-soft); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+    .modal-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(27,43,77,0.06); font-size: 14px; gap: 12px; }
+    .modal-row:last-child { border-bottom: none; }
+    .modal-row .label { color: var(--navy-soft); }
+    .modal-row .value { color: var(--navy); font-weight: 500; text-align: right; word-break: break-word; }
+    .modal-row a { color: var(--green-deep); }
+
+    .photo-zone {
+      margin-top: 18px;
+      padding: 18px;
+      border: 2px dashed rgba(27,43,77,0.16);
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .photo-zone:hover { background: var(--paper); }
+    .photo-zone input { display: none; }
+    .photo-zone .photo-current { max-width: 200px; max-height: 200px; margin: 0 auto 10px; border-radius: 12px; }
+    .photo-zone .label-txt { font-size: 13px; color: var(--navy-soft); }
+
+    .modal-mark-done {
+      margin-top: 22px;
+      width: 100%;
+      padding: 16px;
+      background: var(--green-deep);
+      color: var(--cream);
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      transition: transform .15s, box-shadow .2s;
+    }
+    .modal-mark-done:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(45,106,62,0.36); }
+    .modal-mark-done:disabled { background: var(--gold); cursor: not-allowed; }
+
+    .visit-list { margin-top: 8px; max-height: 180px; overflow-y: auto; }
+    .visit-list .visit {
+      padding: 8px 12px;
+      background: var(--paper);
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--navy-soft);
+      display: flex; justify-content: space-between;
+    }
+
+    .loading {
+      padding: 48px;
+      text-align: center;
+      color: var(--navy-soft);
+    }
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: var(--navy); color: var(--cream);
+      padding: 12px 22px; border-radius: 999px;
+      font-size: 14px; font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 200;
+      opacity: 0; transition: opacity .2s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    @media (max-width: 540px) {
+      .container { padding: 16px 14px 80px; }
+      .today-card { flex-wrap: wrap; }
+      .today-time { width: 64px; font-size: 15px; }
+      .today-info { flex-basis: calc(100% - 80px); }
+      .today-actions { width: 100%; justify-content: stretch; }
+      .mark-done-btn { width: 100%; padding: 12px; }
+      .modal { padding: 22px; }
+      .topbar { padding: 10px 14px; }
+      .topbar-title { font-size: 14px; }
+      .topbar-title small { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- LOGIN VIEW -->
+  <div id="loginView" class="login-wrap">
+    <form class="login-card" id="loginForm">
+      <img src="assets/logo.png" alt="The Yard Concierge">
+      <h1>Admin access</h1>
+      <p>Enter your passcode to manage members.</p>
+      <input type="password" id="passcodeInput" inputmode="numeric" autocomplete="off" placeholder="••••" maxlength="32" autofocus>
+      <button type="submit" id="loginBtn">Sign in</button>
+      <div class="login-err" id="loginErr"></div>
+    </form>
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashView" style="display:none;">
+    <div class="topbar">
+      <div class="topbar-left">
+        <img src="assets/logo.png" alt="">
+        <div class="topbar-title">
+          Yard Concierge
+          <small>Admin · <span id="todayLabel"></span></small>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="refresh-btn" id="refreshBtn" title="Refresh">↻ Refresh</button>
+        <button class="logout-btn" id="logoutBtn">Sign out</button>
+      </div>
+    </div>
+
+    <main class="container">
+      <section id="todaySection">
+        <div class="section-head">
+          <h2>Today's schedule</h2>
+          <span class="count" id="todayCount">—</span>
+        </div>
+        <div id="todayList"></div>
+      </section>
+
+      <section id="membersSection">
+        <div class="section-head">
+          <h2>All members</h2>
+          <span class="count" id="membersCount">—</span>
+        </div>
+        <div id="memberGrid" class="member-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MEMBER MODAL -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" id="modal">
+      <div class="modal-head">
+        <div class="member-avatar" id="modalAvatar"></div>
+        <div>
+          <h2 id="modalName">—</h2>
+          <div class="sub" id="modalSub">—</div>
+        </div>
+        <button class="modal-close" id="modalClose" type="button">×</button>
+      </div>
+
+      <div class="modal-section">
+        <h3>Contact</h3>
+        <div class="modal-row"><span class="label">Phone</span><span class="value" id="modalPhone">—</span></div>
+        <div class="modal-row"><span class="label">Email</span><span class="value" id="modalEmail">—</span></div>
+        <div class="modal-row"><span class="label">Address</span><span class="value" id="modalAddress">—</span></div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Schedule</h3>
+        <div class="modal-row"><span class="label">Day</span><span class="value" id="modalDay">—</span></div>
+        <div class="modal-row"><span class="label">Time</span><span class="value" id="modalTime">—</span></div>
+        <div class="modal-row"><span class="label">Plan</span><span class="value" id="modalPlan">—</span></div>
+        <div class="modal-row"><span class="label">Add-ons</span><span class="value" id="modalAddons">—</span></div>
+        <div class="modal-row"><span class="label">Monthly</span><span class="value" id="modalMonthly">—</span></div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Yard access</h3>
+        <div class="modal-row"><span class="label">Access</span><span class="value" id="modalAccess">—</span></div>
+        <div class="modal-row" id="modalGateRow" style="display:none;"><span class="label">Gate code</span><span class="value" id="modalGate">—</span></div>
+        <div class="modal-row" id="modalNotesRow" style="display:none;"><span class="label">Notes</span><span class="value" id="modalNotes">—</span></div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Dogs</h3>
+        <div id="modalDogs"></div>
+      </div>
+
+      <div class="modal-section">
+        <h3>Yard photo (private — saved on this device)</h3>
+        <label class="photo-zone" id="photoZone">
+          <input type="file" id="photoInput" accept="image/*">
+          <img id="photoCurrent" class="photo-current" style="display:none;">
+          <div class="label-txt" id="photoLabel">Tap to upload a photo of the yard</div>
+        </label>
+      </div>
+
+      <div class="modal-section">
+        <h3>Visit history (<span id="visitCount">0</span>)</h3>
+        <div class="visit-list" id="visitList"></div>
+      </div>
+
+      <button class="modal-mark-done" id="modalMarkDone" type="button">
+        ✓ Mark visit complete &amp; email customer
+      </button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ============================================
+    // STATE + HELPERS
+    // ============================================
+    const state = { members: [], current: null };
+    const DAY_KEYS = ['sun','mon','tue','wed','thu','fri','sat'];
+    const DAY_LABEL = { mon:'Monday', tue:'Tuesday', wed:'Wednesday', thu:'Thursday', fri:'Friday', sat:'Saturday', sun:'Sunday' };
+
+    function fmtSlot(t) {
+      if (!t) return '—';
+      const [h, m] = t.split(':').map(Number);
+      const period = h >= 12 ? 'PM' : 'AM';
+      const hh = h % 12 === 0 ? 12 : h % 12;
+      return hh + ':' + String(m).padStart(2,'0') + ' ' + period;
+    }
+    function initialsOf(name) {
+      return name.trim().split(/\s+/).slice(0,2).map(s => s[0]).join('').toUpperCase() || '🐾';
+    }
+    function fmtDateTime(iso) {
+      const d = new Date(iso);
+      if (isNaN(d)) return iso;
+      return d.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+    }
+    function todayKey() {
+      return DAY_KEYS[new Date().getDay()];
+    }
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    // ============================================
+    // LOGIN
+    // ============================================
+    const loginView = document.getElementById('loginView');
+    const dashView  = document.getElementById('dashView');
+    document.getElementById('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const passcode = document.getElementById('passcodeInput').value;
+      const btn = document.getElementById('loginBtn');
+      const err = document.getElementById('loginErr');
+      err.textContent = '';
+      btn.disabled = true;
+      btn.textContent = 'Checking…';
+      try {
+        const r = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ passcode })
+        });
+        const data = await r.json();
+        if (r.ok) {
+          enterDashboard();
+        } else {
+          err.textContent = data.error || 'Sign in failed';
+        }
+      } catch (e) {
+        err.textContent = 'Network error';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Sign in';
+      }
+    });
+
+    function enterDashboard() {
+      loginView.style.display = 'none';
+      dashView.style.display = 'block';
+      const d = new Date();
+      document.getElementById('todayLabel').textContent =
+        d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+      loadMembers();
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      document.cookie = 'yc-admin=; Path=/; Max-Age=0';
+      location.reload();
+    });
+    document.getElementById('refreshBtn').addEventListener('click', loadMembers);
+
+    // ============================================
+    // LOAD MEMBERS
+    // ============================================
+    async function loadMembers() {
+      document.getElementById('todayList').innerHTML = '<div class="loading">Loading members…</div>';
+      document.getElementById('memberGrid').innerHTML = '';
+      try {
+        const r = await fetch('/api/admin/members');
+        if (r.status === 401) {
+          // Cookie expired or never set — show login
+          dashView.style.display = 'none';
+          loginView.style.display = 'grid';
+          return;
+        }
+        const data = await r.json();
+        state.members = data.members || [];
+        renderToday();
+        renderAllMembers();
+      } catch (e) {
+        document.getElementById('todayList').innerHTML = '<div class="today-empty">Couldn\'t load members. Try refreshing.</div>';
+      }
+    }
+
+    function renderToday() {
+      const tk = todayKey();
+      const todays = state.members
+        .filter(m => m.preferredDay === tk && (m.status === 'active' || m.status === 'trialing'))
+        .sort((a,b) => (a.preferredTime||'').localeCompare(b.preferredTime||''));
+      document.getElementById('todayCount').textContent = todays.length + (todays.length === 1 ? ' visit' : ' visits');
+
+      const wrap = document.getElementById('todayList');
+      if (!todays.length) {
+        wrap.innerHTML = '<div class="today-empty"><span class="icon">🌴</span>No visits scheduled today. Enjoy the day off.</div>';
+        return;
+      }
+      const todayISO = new Date().toISOString().slice(0,10);
+      wrap.innerHTML = '<div class="today-list">' + todays.map(m => {
+        const visitedToday = (m.visits || []).some(v => v.slice(0,10) === todayISO);
+        return `
+          <div class="today-card ${visitedToday ? 'done' : ''}">
+            <div class="today-time">${m.preferredTimeLabel || '—'}</div>
+            <div class="today-info">
+              <div class="today-name">${escapeHtml(m.name)}</div>
+              <div class="today-meta">${escapeHtml(m.address || '')} · ${m.dogCount} dog${m.dogCount === 1 ? '' : 's'}</div>
+            </div>
+            <div class="today-actions">
+              <button class="mark-done-btn" data-id="${m.id}" ${visitedToday ? 'disabled' : ''}>
+                ${visitedToday ? '✓ Done' : '✓ Mark done'}
+              </button>
+            </div>
+          </div>`;
+      }).join('') + '</div>';
+
+      wrap.querySelectorAll('.mark-done-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          quickMarkDone(btn.dataset.id, btn);
+        });
+      });
+      wrap.querySelectorAll('.today-card').forEach((card, i) => {
+        card.addEventListener('click', () => openMember(todays[i].id));
+      });
+    }
+
+    function renderAllMembers() {
+      const active = state.members.filter(m => m.status === 'active' || m.status === 'trialing');
+      const others = state.members.filter(m => !(m.status === 'active' || m.status === 'trialing'));
+      const list = active.concat(others);
+      document.getElementById('membersCount').textContent = active.length + (active.length === 1 ? ' active' : ' active');
+
+      const grid = document.getElementById('memberGrid');
+      if (!list.length) {
+        grid.innerHTML = '<div class="today-empty" style="grid-column:1/-1;"><span class="icon">📭</span>No members yet. They\'ll show up here the moment someone signs up.</div>';
+        return;
+      }
+      grid.innerHTML = list.map(m => {
+        const photoData = getPhoto(m.id);
+        const avatarStyle = photoData
+          ? `background-image:url('${photoData}');background-color:transparent;`
+          : '';
+        const initials = photoData ? '' : initialsOf(m.name);
+        const lastVisit = (m.visits && m.visits[0]) ? new Date(m.visits[0]).toLocaleDateString() : 'No visits yet';
+        const statusBadge = m.status === 'active'
+          ? '<span class="badge">Active</span>'
+          : m.status === 'trialing'
+            ? '<span class="badge gold">Trial</span>'
+            : '<span class="badge red">' + m.status + '</span>';
+        return `
+          <div class="member-card ${(m.status !== 'active' && m.status !== 'trialing') ? 'inactive' : ''}" data-id="${m.id}">
+            <div class="member-card-head">
+              <div class="member-avatar" style="${avatarStyle}">${initials}</div>
+              <div>
+                <div class="member-name">${escapeHtml(m.name)}</div>
+                <div class="member-name-meta">${statusBadge}${escapeHtml(m.planLabel || '')}</div>
+              </div>
+            </div>
+            <div class="member-body">
+              <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span><strong>${escapeHtml(m.preferredDayLabel || '—')}</strong> at <strong>${m.preferredTimeLabel || '—'}</strong></span></div>
+              <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-7-11a7 7 0 0114 0c0 6.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>${escapeHtml(m.address || 'No address')}</span></div>
+              <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l2 2 4-4"/><path d="M21 12c0 5-3.5 7.5-9 9-5.5-1.5-9-4-9-9V5l9-3 9 3v7z"/></svg><span>Last: ${lastVisit}</span></div>
+            </div>
+          </div>`;
+      }).join('');
+
+      grid.querySelectorAll('.member-card').forEach(card => {
+        card.addEventListener('click', () => openMember(card.dataset.id));
+      });
+    }
+
+    // ============================================
+    // PHOTO STORAGE — base64 in localStorage per member
+    // ============================================
+    function getPhoto(id) { return localStorage.getItem('yc-photo-' + id) || ''; }
+    function setPhoto(id, dataUrl) {
+      try { localStorage.setItem('yc-photo-' + id, dataUrl); }
+      catch (e) { showToast('Photo too large — try a smaller one.'); }
+    }
+
+    // ============================================
+    // MEMBER MODAL
+    // ============================================
+    const modal = document.getElementById('modalBackdrop');
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+    function openMember(id) {
+      const m = state.members.find(x => x.id === id);
+      if (!m) return;
+      state.current = m;
+
+      document.getElementById('modalName').textContent = m.name;
+      const statusTxt = m.status === 'active' ? 'Active member'
+                     : m.status === 'trialing' ? 'In trial'
+                     : 'Status: ' + m.status;
+      document.getElementById('modalSub').textContent = statusTxt + ' · since ' + new Date(m.createdAt).toLocaleDateString();
+      const photo = getPhoto(m.id);
+      const av = document.getElementById('modalAvatar');
+      if (photo) { av.style.backgroundImage = `url('${photo}')`; av.style.backgroundColor = 'transparent'; av.textContent = ''; }
+      else { av.style.backgroundImage = ''; av.style.backgroundColor = 'var(--green-deep)'; av.textContent = initialsOf(m.name); }
+
+      document.getElementById('modalPhone').innerHTML = m.phone ? `<a href="tel:${m.phone}">${escapeHtml(m.phone)}</a>` : '—';
+      document.getElementById('modalEmail').innerHTML = m.email ? `<a href="mailto:${m.email}">${escapeHtml(m.email)}</a>` : '—';
+      document.getElementById('modalAddress').textContent = (m.address || '—') + (m.zip ? ', ' + m.zip : '');
+
+      document.getElementById('modalDay').textContent = m.preferredDayLabel || '—';
+      document.getElementById('modalTime').textContent = m.preferredTimeLabel || '—';
+      document.getElementById('modalPlan').textContent = m.planLabel || '—';
+      const addonLabels = (m.addons || []).map(a => a === 'deodorize' ? 'Turf Deodorize' : a).join(' + ') || 'None';
+      document.getElementById('modalAddons').textContent = addonLabels;
+      document.getElementById('modalMonthly').textContent = '$' + m.monthlyTotal.toFixed(0) + ' / mo';
+
+      const accessLabel = (m.accessType || '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || '—';
+      document.getElementById('modalAccess').textContent = accessLabel;
+      const gateRow = document.getElementById('modalGateRow');
+      if (m.gateCode) { gateRow.style.display = 'flex'; document.getElementById('modalGate').textContent = m.gateCode; }
+      else gateRow.style.display = 'none';
+      const notesRow = document.getElementById('modalNotesRow');
+      if (m.accessNotes) { notesRow.style.display = 'flex'; document.getElementById('modalNotes').textContent = m.accessNotes; }
+      else notesRow.style.display = 'none';
+
+      // Dogs — meta string like "1. Bella (m, golden) | 2. Charlie (s, terrier)"
+      const dogsHtml = (m.dogs || '').split('|').filter(s => s.trim()).map(s => {
+        const m2 = s.match(/(\d+)\.\s*([^\(]+)\(([^\)]+)\)/);
+        if (m2) {
+          return `<div class="modal-row"><span class="label">Dog ${m2[1].trim()}</span><span class="value">${escapeHtml(m2[2].trim())} <small style="color:var(--navy-soft);">(${escapeHtml(m2[3].trim())})</small></span></div>`;
+        }
+        return `<div class="modal-row"><span class="label">Dog</span><span class="value">${escapeHtml(s.trim())}</span></div>`;
+      }).join('') || '<div class="modal-row"><span class="value">No dog info</span></div>';
+      document.getElementById('modalDogs').innerHTML = dogsHtml;
+
+      // Photo zone
+      const photoCurrent = document.getElementById('photoCurrent');
+      if (photo) {
+        photoCurrent.src = photo;
+        photoCurrent.style.display = 'block';
+        document.getElementById('photoLabel').textContent = 'Tap to replace photo';
+      } else {
+        photoCurrent.style.display = 'none';
+        document.getElementById('photoLabel').textContent = 'Tap to upload a photo of the yard';
+      }
+
+      // Visit history
+      const vList = document.getElementById('visitList');
+      document.getElementById('visitCount').textContent = (m.visits || []).length;
+      if (!m.visits || m.visits.length === 0) {
+        vList.innerHTML = '<div class="visit"><span>No visits logged yet.</span></div>';
+      } else {
+        vList.innerHTML = m.visits.map(v =>
+          `<div class="visit"><span>${fmtDateTime(v)}</span><span>✓</span></div>`
+        ).join('');
+      }
+
+      // Mark done button
+      const mdBtn = document.getElementById('modalMarkDone');
+      const todayISO = new Date().toISOString().slice(0,10);
+      const doneToday = (m.visits || []).some(v => v.slice(0,10) === todayISO);
+      if (doneToday) {
+        mdBtn.disabled = true;
+        mdBtn.textContent = '✓ Already marked done today';
+      } else {
+        mdBtn.disabled = false;
+        mdBtn.textContent = '✓ Mark visit complete & email customer';
+      }
+
+      modal.classList.add('open');
+    }
+    function closeModal() {
+      modal.classList.remove('open');
+      state.current = null;
+    }
+
+    // Photo upload
+    document.getElementById('photoInput').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file || !state.current) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        // Resize before saving to keep localStorage small
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX = 600;
+          let w = img.width, h = img.height;
+          if (w > h && w > MAX) { h = (h * MAX) / w; w = MAX; }
+          else if (h > MAX) { w = (w * MAX) / h; h = MAX; }
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          const compressed = canvas.toDataURL('image/jpeg', 0.78);
+          setPhoto(state.current.id, compressed);
+          // Update visible
+          document.getElementById('photoCurrent').src = compressed;
+          document.getElementById('photoCurrent').style.display = 'block';
+          document.getElementById('photoLabel').textContent = 'Tap to replace photo';
+          const av = document.getElementById('modalAvatar');
+          av.style.backgroundImage = `url('${compressed}')`;
+          av.style.backgroundColor = 'transparent';
+          av.textContent = '';
+          renderAllMembers(); // refresh card avatars
+          showToast('Photo saved on this device');
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Mark done (modal)
+    document.getElementById('modalMarkDone').addEventListener('click', async () => {
+      if (!state.current) return;
+      const btn = document.getElementById('modalMarkDone');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        const r = await fetch('/api/admin/mark-visit-complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subscriptionId: state.current.id })
+        });
+        const data = await r.json();
+        if (r.ok) {
+          showToast('Visit logged & customer emailed 🐾');
+          await loadMembers();
+          // re-open this member to show updated history
+          const id = state.current.id;
+          closeModal();
+          setTimeout(() => openMember(id), 250);
+        } else {
+          showToast(data.error || 'Failed');
+          btn.disabled = false;
+          btn.textContent = '✓ Mark visit complete & email customer';
+        }
+      } catch (e) {
+        showToast('Network error');
+        btn.disabled = false;
+        btn.textContent = '✓ Mark visit complete & email customer';
+      }
+    });
+
+    // Quick "mark done" from today list
+    async function quickMarkDone(subId, btn) {
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        const r = await fetch('/api/admin/mark-visit-complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subscriptionId: subId })
+        });
+        const data = await r.json();
+        if (r.ok) {
+          btn.textContent = '✓ Done';
+          showToast('Customer notified ✓');
+          loadMembers();
+        } else {
+          btn.disabled = false;
+          btn.textContent = '✓ Mark done';
+          showToast(data.error || 'Failed');
+        }
+      } catch (e) {
+        btn.disabled = false;
+        btn.textContent = '✓ Mark done';
+        showToast('Network error');
+      }
+    }
+
+    function escapeHtml(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+        ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    // ============================================
+    // INIT — try the members endpoint; if 200, skip login
+    // ============================================
+    (async () => {
+      try {
+        const r = await fetch('/api/admin/members');
+        if (r.ok) enterDashboard();
+      } catch (e) {}
+    })();
+  </script>
+</body>
+</html>

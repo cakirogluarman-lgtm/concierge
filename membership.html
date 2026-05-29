@@ -327,6 +327,167 @@
     @media (max-width: 540px) {
       .option-grid.cols-3, .option-grid.cols-4 { grid-template-columns: 1fr 1fr; }
     }
+
+    /* === SCHEDULE STEP === */
+    .schedule-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy-soft);
+      margin-bottom: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .day-pills {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 540px) {
+      .day-pills { grid-template-columns: repeat(4, 1fr); }
+    }
+    .day-pill {
+      padding: 14px 8px;
+      border: 2px solid rgba(27, 43, 77, 0.12);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      color: var(--navy);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all .2s var(--ease-out);
+    }
+    .day-pill:hover:not(:disabled) {
+      border-color: var(--green-deep);
+      transform: translateY(-1px);
+    }
+    .day-pill.selected {
+      background: var(--green-deep);
+      color: var(--cream);
+      border-color: var(--green-deep);
+      box-shadow: 0 6px 14px rgba(45,106,62,0.28);
+    }
+    .day-pill.weekend {
+      border-style: dashed;
+    }
+    .day-pill.weekend.selected { border-style: solid; }
+
+    .pick-day-prompt {
+      text-align: center;
+      padding: 36px 20px;
+      color: var(--navy-soft);
+      font-size: 14px;
+      background: var(--paper);
+      border-radius: var(--radius-md);
+      border: 1px dashed rgba(27,43,77,0.14);
+    }
+    .pick-day-prompt .prompt-icon {
+      display: block;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .time-window-block {
+      margin-bottom: 20px;
+    }
+    .time-window-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy-soft);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    @media (max-width: 540px) {
+      .time-slots { grid-template-columns: repeat(3, 1fr); }
+    }
+    .slot {
+      padding: 11px 4px;
+      border: 1.5px solid rgba(27, 43, 77, 0.12);
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--navy);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .15s ease;
+      text-align: center;
+    }
+    .slot:hover:not(:disabled):not(.full) {
+      border-color: var(--green-deep);
+      transform: translateY(-1px);
+    }
+    .slot.selected {
+      background: var(--green-deep);
+      color: var(--cream);
+      border-color: var(--green-deep);
+    }
+    .slot.full {
+      background: var(--paper);
+      color: rgba(27, 43, 77, 0.32);
+      border-color: rgba(27, 43, 77, 0.08);
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+    .slot-legend {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--navy-soft);
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-dot {
+      width: 12px; height: 12px; border-radius: 4px;
+      border: 1.5px solid rgba(27,43,77,0.12);
+      background: var(--white);
+      display: inline-block;
+    }
+    .legend-dot.full {
+      background: var(--paper);
+      border-color: rgba(27,43,77,0.08);
+    }
+    .legend-dot.selected {
+      background: var(--green-deep);
+      border-color: var(--green-deep);
+    }
+
+    body.coastal .day-pill,
+    body.coastal .slot {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(245,228,179,0.2);
+      color: var(--cream);
+    }
+    body.coastal .day-pill.selected,
+    body.coastal .slot.selected {
+      background: var(--gold);
+      color: #1B2B4D;
+      border-color: var(--gold);
+    }
+    body.coastal .slot.full {
+      background: rgba(0,0,0,0.18);
+      color: rgba(245,228,179,0.25);
+      border-color: rgba(245,228,179,0.08);
+    }
+    body.coastal .pick-day-prompt {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(245,228,179,0.18);
+      color: rgba(245,228,179,0.7);
+    }
     .option-card {
       padding: 20px 22px;
       border: 2px solid rgba(27, 43, 77, 0.1);
@@ -1323,23 +1484,39 @@
     <!-- STEP 8 — Schedule -->
     <div class="step" data-step="8" data-key="schedule">
       <span class="step-eyebrow">Step 8</span>
-      <h1>When works best?</h1>
-      <p class="step-sub">Pick your day and time. Same slot every week.</p>
+      <h1>Pick your visit time.</h1>
+      <p class="step-sub">Same slot every visit — predictable for you, easy for us. Full slots are greyed out.</p>
       <div class="step-body">
-        <label style="display: block; font-size: 13px; font-weight: 600; color: var(--navy-soft); margin-bottom: 8px; letter-spacing: 0.04em;">PREFERRED DAY</label>
-        <div class="option-grid cols-3" id="dayOptions" style="margin-bottom: 20px;">
-          <button class="option-card" data-value="mon" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Mon</strong></span></button>
-          <button class="option-card" data-value="tue" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Tue</strong></span></button>
-          <button class="option-card" data-value="wed" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Wed</strong></span></button>
-          <button class="option-card" data-value="thu" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Thu</strong></span></button>
-          <button class="option-card" data-value="fri" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Fri</strong></span></button>
-          <button class="option-card" data-value="any" type="button" style="justify-content: center;"><span class="option-text" style="text-align: center;"><strong>Any day</strong></span></button>
+        <label class="schedule-label">PREFERRED DAY</label>
+        <div class="day-pills" id="dayOptions">
+          <button class="day-pill" data-value="mon" type="button">Mon</button>
+          <button class="day-pill" data-value="tue" type="button">Tue</button>
+          <button class="day-pill" data-value="wed" type="button">Wed</button>
+          <button class="day-pill" data-value="thu" type="button">Thu</button>
+          <button class="day-pill" data-value="fri" type="button">Fri</button>
+          <button class="day-pill weekend" data-value="sat" type="button">Sat</button>
+          <button class="day-pill weekend" data-value="sun" type="button">Sun</button>
         </div>
-        <label style="display: block; font-size: 13px; font-weight: 600; color: var(--navy-soft); margin-bottom: 8px; letter-spacing: 0.04em;">TIME WINDOW</label>
-        <div class="option-grid cols-3" id="timeOptions">
-          <button class="option-card" data-value="morning" type="button"><span class="option-emoji">🌅</span><span class="option-text"><strong>Morning</strong><span>8a – 12p</span></span></button>
-          <button class="option-card" data-value="afternoon" type="button"><span class="option-emoji">☀️</span><span class="option-text"><strong>Afternoon</strong><span>12p – 4p</span></span></button>
-          <button class="option-card" data-value="evening" type="button"><span class="option-emoji">🌇</span><span class="option-text"><strong>Evening</strong><span>4p – 7p</span></span></button>
+
+        <div id="pickDayPrompt" class="pick-day-prompt">
+          <span class="prompt-icon">🗓️</span>
+          Pick a day above to see available time slots.
+        </div>
+
+        <div id="timeSlotSection" style="display:none;">
+          <div class="time-window-block" data-window="morning">
+            <div class="time-window-label">Morning</div>
+            <div class="time-slots" id="slotsMorning"></div>
+          </div>
+          <div class="time-window-block" data-window="evening">
+            <div class="time-window-label">Evening</div>
+            <div class="time-slots" id="slotsEvening"></div>
+          </div>
+          <div class="slot-legend">
+            <span class="legend-item"><span class="legend-dot avail"></span>Available</span>
+            <span class="legend-item"><span class="legend-dot full"></span>Booked</span>
+            <span class="legend-item"><span class="legend-dot selected"></span>Your pick</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1896,8 +2073,110 @@
       });
     }
     setupSingleSelect('accessTypeOptions', 'accessType');
-    setupSingleSelect('dayOptions', 'day');
-    setupSingleSelect('timeOptions', 'time');
+
+    // ============================================
+    // SCHEDULE STEP — day + 15-min time slot picker
+    // ============================================
+    // Time slots: weekday windows = 6:00-7:30am + 5:00-9:45pm; weekend = 7am-7:45pm.
+    // Each 15-min slot holds 1 booking (= 4 customers per hour).
+    const SLOT_WINDOWS = {
+      weekday: {
+        morning: ['06:00','06:15','06:30','06:45','07:00','07:15','07:30'],
+        evening: ['17:00','17:15','17:30','17:45','18:00','18:15','18:30','18:45',
+                  '19:00','19:15','19:30','19:45','20:00','20:15','20:30','20:45',
+                  '21:00','21:15','21:30','21:45']
+      },
+      weekend: {
+        morning: ['07:00','07:15','07:30','07:45','08:00','08:15','08:30','08:45',
+                  '09:00','09:15','09:30','09:45','10:00','10:15','10:30','10:45',
+                  '11:00','11:15','11:30','11:45'],
+        evening: ['12:00','12:15','12:30','12:45','13:00','13:15','13:30','13:45',
+                  '14:00','14:15','14:30','14:45','15:00','15:15','15:30','15:45',
+                  '16:00','16:15','16:30','16:45','17:00','17:15','17:30','17:45',
+                  '18:00','18:15','18:30','18:45','19:00','19:15','19:30','19:45']
+      }
+    };
+    const WEEKEND_DAYS = ['sat', 'sun'];
+
+    let availabilityCache = null; // populated on first day-click
+    let availabilityFetched = false;
+
+    function fmtSlot(t) {
+      // "06:30" → "6:30 AM"
+      const [h, m] = t.split(':').map(Number);
+      const period = h >= 12 ? 'PM' : 'AM';
+      const hh = h % 12 === 0 ? 12 : h % 12;
+      return hh + ':' + String(m).padStart(2,'0') + ' ' + period;
+    }
+
+    async function fetchAvailability() {
+      if (availabilityFetched) return availabilityCache;
+      try {
+        const r = await fetch('/api/availability');
+        if (r.ok) availabilityCache = await r.json();
+      } catch (e) { /* offline / new install — treat all as available */ }
+      availabilityFetched = true;
+      return availabilityCache || {};
+    }
+
+    function renderTimeSlots(day) {
+      const isWknd = WEEKEND_DAYS.includes(day);
+      const windows = isWknd ? SLOT_WINDOWS.weekend : SLOT_WINDOWS.weekday;
+      const bookedKeys = (availabilityCache && availabilityCache.booked) || {};
+
+      function renderBucket(containerId, slots) {
+        const el = document.getElementById(containerId);
+        el.innerHTML = '';
+        slots.forEach(t => {
+          const key = day + '|' + t;
+          const isFull = !!bookedKeys[key];
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'slot' + (isFull ? ' full' : '') + (state.day === day && state.time === t ? ' selected' : '');
+          btn.dataset.time = t;
+          btn.textContent = fmtSlot(t);
+          if (isFull) { btn.disabled = true; btn.title = 'Already booked'; }
+          else {
+            btn.addEventListener('click', () => {
+              state.day = day;
+              state.time = t;
+              document.querySelectorAll('#timeSlotSection .slot').forEach(s => s.classList.remove('selected'));
+              btn.classList.add('selected');
+            });
+          }
+          el.appendChild(btn);
+        });
+      }
+
+      renderBucket('slotsMorning', windows.morning);
+      renderBucket('slotsEvening', windows.evening);
+
+      // Hide labels for windows that don't apply to weekends (we still show 2 buckets, but rename them)
+      const labels = document.querySelectorAll('#timeSlotSection .time-window-label');
+      if (labels.length >= 2) {
+        if (isWknd) {
+          labels[0].textContent = 'Morning · 7am–noon';
+          labels[1].textContent = 'Afternoon & evening · noon–8pm';
+        } else {
+          labels[0].textContent = 'Early morning · 6am–7:30am';
+          labels[1].textContent = 'Evening · 5pm–10pm';
+        }
+      }
+    }
+
+    // Day pill clicks
+    document.querySelectorAll('#dayOptions .day-pill').forEach(pill => {
+      pill.addEventListener('click', async () => {
+        document.querySelectorAll('#dayOptions .day-pill').forEach(p => p.classList.remove('selected'));
+        pill.classList.add('selected');
+        state.day = pill.dataset.value;
+        state.time = ''; // reset time when day changes
+        document.getElementById('pickDayPrompt').style.display = 'none';
+        document.getElementById('timeSlotSection').style.display = 'block';
+        await fetchAvailability();
+        renderTimeSlots(state.day);
+      });
+    });
 
     // Addons multi-select
     document.querySelectorAll('.option-card.addon').forEach(card => {
@@ -1936,9 +2215,9 @@
       document.getElementById('reviewPhone').textContent = state.phone || '—';
       document.getElementById('reviewStreet').textContent = state.street + (state.aptUnit ? ', ' + state.aptUnit : '');
       document.getElementById('reviewZip').textContent = state.zip || '—';
-      document.getElementById('reviewDay').textContent = state.day === 'any' ? 'Any weekday' : state.day.charAt(0).toUpperCase() + state.day.slice(1);
-      const tLabel = { morning: 'Morning · 8a–12p', afternoon: 'Afternoon · 12p–4p', evening: 'Evening · 4p–7p' }[state.time] || '—';
-      document.getElementById('reviewTime').textContent = tLabel;
+      const dayMap = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' };
+      document.getElementById('reviewDay').textContent = dayMap[state.day] || '—';
+      document.getElementById('reviewTime').textContent = state.time ? fmtSlot(state.time) : '—';
       document.getElementById('reviewDogsList').innerHTML = state.dogs.map((d, i) =>
         `<div class="summary-row"><span class="label">${d.name || 'Dog ' + (i + 1)}</span><span class="value">${d.size ? 'Size ' + d.size : ''}${d.breed ? ' · ' + d.breed : ''}</span></div>`
       ).join('');

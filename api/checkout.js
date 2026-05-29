@@ -47,6 +47,34 @@ module.exports = async (req, res) => {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: 'Valid email required' });
     }
+    if (!day || !time) {
+      return res.status(400).json({ error: 'Please pick a day and time slot' });
+    }
+
+    // === SLOT-AVAILABILITY GUARD ===
+    // Each 15-min slot holds exactly 1 customer. Re-check live so we never overbook.
+    try {
+      let hasMore = true, startingAfter, safety = 0;
+      while (hasMore && safety < 20) {
+        safety++;
+        const params = { status: 'active', limit: 100 };
+        if (startingAfter) params.starting_after = startingAfter;
+        const page = await stripe.subscriptions.list(params);
+        for (const sub of page.data) {
+          const m = sub.metadata || {};
+          if ((m.preferredDay || '').toLowerCase() === day.toLowerCase()
+              && (m.preferredTime || '') === time) {
+            return res.status(409).json({
+              error: 'That slot was just booked by someone else. Please pick another time.'
+            });
+          }
+        }
+        hasMore = page.has_more;
+        if (hasMore && page.data.length) startingAfter = page.data[page.data.length - 1].id;
+      }
+    } catch (slotErr) {
+      console.error('slot check failed:', slotErr.message);
+    }
 
     const visits   = VISITS_PER_MONTH[plan];
     const extraDogs = Math.max(0, Number(dogCount) - 2);
