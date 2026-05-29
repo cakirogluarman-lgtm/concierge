@@ -966,10 +966,7 @@
       border-bottom-color: rgba(143, 180, 216, 0.15);
     }
     body.coastal .form-logo-text { color: var(--cream); }
-    body.coastal .form-logo img {
-      filter: brightness(0) saturate(100%) invert(81%) sepia(48%) saturate(471%) hue-rotate(347deg) brightness(101%) contrast(94%);
-      opacity: 0.96;
-    }
+    /* Logo color swap in coastal mode is via src swap in JS (assets/logo-gold.png), not CSS filter — prevents mobile Safari filter glitches */
     body.coastal .form-close {
       color: #B8D4F1;
     }
@@ -1444,15 +1441,27 @@
   <script>
     // ============================================
     // COASTAL MODE TOGGLE — shares localStorage key with index.html
+    // Logo color swap is done via src swap (NOT CSS filter) for clean mobile Safari rendering
     // ============================================
     (function setupModeToggle() {
       const btn = document.getElementById('modeToggle');
       if (!btn) return;
+      const LOGO_NAVY = 'assets/logo.png';
+      const LOGO_GOLD = 'assets/logo-gold.png';
+      function swapLogos(isCoastal) {
+        const target = isCoastal ? LOGO_GOLD : LOGO_NAVY;
+        document.querySelectorAll('.form-logo img').forEach(img => {
+          if (!img.src.endsWith(target.split('/').pop())) img.src = target;
+        });
+      }
       const saved = localStorage.getItem('yc-mode');
       if (saved === 'coastal') {
         document.body.classList.add('coastal');
         btn.setAttribute('title', 'Switch to Sunshine mode');
         document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0B2545');
+        swapLogos(true);
+      } else {
+        swapLogos(false);
       }
       btn.addEventListener('click', () => {
         document.body.classList.toggle('coastal');
@@ -1460,6 +1469,7 @@
         localStorage.setItem('yc-mode', isCoastal ? 'coastal' : 'sunshine');
         btn.setAttribute('title', isCoastal ? 'Switch to Sunshine mode' : 'Switch to Coastal mode');
         document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isCoastal ? '#0B2545' : '#FAF6EE');
+        swapLogos(isCoastal);
       });
     })();
 
