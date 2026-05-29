@@ -1589,21 +1589,22 @@
       .hero-logo-wrap { max-width: 240px; aspect-ratio: 1; }
       .hero-dogs { max-width: 220px; max-height: 220px; }
       .hero-logo-glow { inset: -20px; }
-      /* Floating trust badges — same RATIO and LOCATION as desktop, just scaled down */
+      /* Floating trust badges — pushed far off the dog on each side, smaller pills */
       .float-badge {
         display: flex;
-        font-size: 10px;
-        padding: 5px 9px;
-        gap: 5px;
+        font-size: 9px;
+        padding: 4px 8px;
+        gap: 4px;
         font-weight: 600;
         border-radius: 999px;
+        letter-spacing: 0;
       }
-      .float-badge svg { width: 12px; height: 12px; }
-      /* Identical position % to desktop so badges float AROUND the dog, not on it */
-      .float-badge.one   { top: 6%;  left: -8%; }
-      .float-badge.two   { top: 36%; right: -10%; }
-      .float-badge.three { bottom: 12%; left: -4%; }
-      .float-badge.four  { bottom: 28%; right: 4%; }
+      .float-badge svg { width: 11px; height: 11px; }
+      /* Pushed far to the sides so they float OFF the dog, not on it */
+      .float-badge.one   { top: 12%; left: -28%; }
+      .float-badge.two   { top: 40%; right: -28%; }
+      .float-badge.three { bottom: 18%; left: -24%; }
+      .float-badge.four  { bottom: 32%; right: -22%; }
 
       /* === HORIZONTAL SCROLL CAROUSEL (mobile, pricing only — testimonials already scroll on all sizes) === */
       .pricing-grid {
