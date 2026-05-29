@@ -1538,7 +1538,8 @@
       }
       .mobile-menu.open { transform: translateY(0); }
       .mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-      .mobile-menu a {
+      /* Scoped to UL so it doesn't override the button's own colors */
+      .mobile-menu ul a {
         display: block;
         padding: 16px 0;
         font-family: 'Fraunces', serif;
@@ -1549,16 +1550,32 @@
       }
       .mobile-menu .btn { margin-top: 24px; width: 100%; justify-content: center; }
 
+      /* === HERO (mobile) ===
+         Reorder: eyebrow → headline → lead → [DOG GRAPHIC] → CTAs → trust
+         This puts the CTAs above the fold on phones */
       .hero-grid {
-        grid-template-columns: 1fr;
-        gap: 48px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
+        gap: 20px;
       }
-      .hero-content { margin: 0 auto; }
-      .hero-content .eyebrow { margin-left: auto; margin-right: auto; }
-      .hero-ctas { justify-content: center; }
-      .hero-trust { justify-content: center; }
-      .hero-visual { min-height: 380px; max-width: 380px; margin: 0 auto; }
+      /* display:contents lets .hero-content's children participate in the .hero-grid flex layout */
+      .hero-content {
+        display: contents;
+      }
+      .hero-content .eyebrow { order: 1; align-self: center; margin: 0; }
+      .hero-content h1       { order: 2; margin: 0; }
+      .hero-content p.lead   { order: 3; margin: 0; }
+      .hero-visual           { order: 4; min-height: 180px; max-width: 200px; margin: 4px auto 0; width: 200px; }
+      .hero-content .hero-ctas  { order: 5; justify-content: center; margin: 4px 0 0; }
+      .hero-content .hero-trust { order: 6; justify-content: center; margin: 0; }
+      /* Shrink the dog itself + the surrounding glow/ring */
+      .hero-logo-wrap { max-width: 200px; aspect-ratio: 1; }
+      .hero-dogs { max-width: 200px; max-height: 200px; }
+      /* Hide the floating trust badges on mobile — too cluttered around a small dog */
+      .float-badge { display: none; }
+      .hero-logo-glow { inset: -20px; }
 
       /* === HORIZONTAL SCROLL CAROUSEL (mobile, pricing only — testimonials already scroll on all sizes) === */
       .pricing-grid {
@@ -1882,7 +1899,7 @@
     body.coastal .mobile-menu {
       background: linear-gradient(180deg, #0B2545 0%, #133B66 100%);
     }
-    body.coastal .mobile-menu a {
+    body.coastal .mobile-menu ul a {
       color: var(--cream);
       border-bottom-color: rgba(143, 180, 216, 0.15);
     }
