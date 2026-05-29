@@ -1592,8 +1592,9 @@
         max-width: 168px;
         max-height: 168px;
       }
-      .hero-logo-glow { inset: 30px; }
-      .hero-logo-ring { inset: 30px; }
+      /* Ring now sits at the wrap's edge so badges with small negative offsets sit ON its perimeter */
+      .hero-logo-glow { inset: -10px; }
+      .hero-logo-ring { inset: 0; }
       /* Floating trust badges — small chips sitting on the rotating ring around the dog */
       .float-badge {
         display: flex;
@@ -1607,11 +1608,11 @@
         line-height: 1.3;
       }
       .float-badge svg { width: 9px; height: 9px; }
-      /* Same percentage layout as desktop — badges sit ON the ring's perimeter, not pushed to screen edge */
-      .float-badge.one   { top: 8%;  left: -10%; right: auto; margin: 0; }
-      .float-badge.two   { top: 38%; right: -12%; left: auto; margin: 0; }
-      .float-badge.three { bottom: 14%; left: -8%; right: auto; margin: 0; }
-      .float-badge.four  { bottom: 30%; right: -8%; left: auto; margin: 0; }
+      /* Badge perimeter positions — sit ON the ring (which is now at wrap edge, inset:0) */
+      .float-badge.one   { top: 8%;  left: -6%;  right: auto; margin: 0; }
+      .float-badge.two   { top: 40%; right: -6%; left: auto; margin: 0; }
+      .float-badge.three { bottom: 16%; left: -6%; right: auto; margin: 0; }
+      .float-badge.four  { bottom: 32%; right: -4%; left: auto; margin: 0; }
 
       /* === HORIZONTAL SCROLL CAROUSEL (mobile, pricing only — testimonials already scroll on all sizes) === */
       .pricing-grid {
