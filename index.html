@@ -52,7 +52,12 @@
        RESET + BASE
        ============================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 17px;
@@ -60,6 +65,8 @@
       color: var(--navy);
       background: var(--cream);
       overflow-x: hidden;
+      max-width: 100vw;
+      position: relative;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
@@ -207,17 +214,9 @@
       height: 52px;
       border-radius: 50%;
       box-shadow: var(--shadow-sm);
-      /* Only transform animates — filter swap on mode toggle is instant to avoid black flash on mobile */
       transition: transform 0.4s var(--ease-spring);
-      filter: none;
     }
-    .footer-brand img { filter: none; }
-    /* Coastal mode logo — sandy gold (matches the coastal accent color) */
-    body.coastal .logo-link img,
-    body.coastal .footer-brand img {
-      filter: brightness(0) saturate(100%) invert(81%) sepia(48%) saturate(471%) hue-rotate(347deg) brightness(101%) contrast(94%);
-      opacity: 0.96;
-    }
+    /* Coastal mode logo color is handled via src swap in JS (assets/logo-gold.png) — no CSS filter */
     .logo-link:hover img { transform: rotate(-8deg) scale(1.05); }
     .logo-text {
       font-family: 'Fraunces', serif;
@@ -271,8 +270,8 @@
        HERO
        ============================================ */
     .hero {
-      padding-top: clamp(120px, 18vw, 180px);
-      padding-bottom: clamp(60px, 10vw, 100px);
+      padding-top: clamp(78px, 12vw, 180px);
+      padding-bottom: clamp(40px, 8vw, 100px);
       position: relative;
       overflow: hidden;
     }
@@ -1554,31 +1553,55 @@
       .mobile-menu .btn { margin-top: 24px; width: 100%; justify-content: center; }
 
       /* === HERO (mobile) ===
-         Reorder: eyebrow → headline → lead → [DOG GRAPHIC] → CTAs → trust
-         This puts the CTAs above the fold on phones */
+         Reorder: eyebrow → headline → lead → [DOG] → CTAs → trust (compact) → next-arrow
+         All CTAs above the fold on phones */
       .hero-grid {
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 20px;
+        gap: 16px;
       }
-      /* display:contents lets .hero-content's children participate in the .hero-grid flex layout */
-      .hero-content {
-        display: contents;
-      }
+      .hero-content { display: contents; }
       .hero-content .eyebrow { order: 1; align-self: center; margin: 0; }
       .hero-content h1       { order: 2; margin: 0; }
       .hero-content p.lead   { order: 3; margin: 0; }
-      .hero-visual           { order: 4; min-height: 180px; max-width: 200px; margin: 4px auto 0; width: 200px; }
-      .hero-content .hero-ctas  { order: 5; justify-content: center; margin: 4px 0 0; }
-      .hero-content .hero-trust { order: 6; justify-content: center; margin: 0; }
-      /* Shrink the dog itself + the surrounding glow/ring */
-      .hero-logo-wrap { max-width: 200px; aspect-ratio: 1; }
-      .hero-dogs { max-width: 200px; max-height: 200px; }
-      /* Hide the floating trust badges on mobile — too cluttered around a small dog */
-      .float-badge { display: none; }
+      .hero-visual           { order: 4; min-height: 220px; max-width: 240px; margin: 6px auto 0; width: 100%; }
+      .hero-content .hero-ctas  { order: 5; justify-content: center; margin: 6px 0 0; }
+      /* 5-star trust line — compact, single line, minimal */
+      .hero-content .hero-trust {
+        order: 6;
+        justify-content: center;
+        margin: 0;
+        gap: 6px;
+        font-size: 11px;
+        color: var(--navy-soft);
+        letter-spacing: 0.02em;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        opacity: 0.85;
+      }
+      .hero-content .hero-trust .stars { font-size: 11px; letter-spacing: 1px; }
+      .hero-content .hero-trust .divider { width: 3px; height: 3px; }
+      /* Next-arrow positioned at end of hero, below trust line */
+      .hero-grid .next-arrow.in-hero { order: 7; margin: 8px auto 0; }
+      /* Shrink the dog + surrounding glow */
+      .hero-logo-wrap { max-width: 240px; aspect-ratio: 1; }
+      .hero-dogs { max-width: 220px; max-height: 220px; }
       .hero-logo-glow { inset: -20px; }
+      /* Floating trust badges — smaller and tighter around the smaller dog on mobile */
+      .float-badge {
+        display: flex;
+        font-size: 11px;
+        padding: 6px 11px;
+        gap: 6px;
+        font-weight: 600;
+      }
+      .float-badge svg { width: 14px; height: 14px; }
+      .float-badge.one   { top: -2%;  left: -12%; }
+      .float-badge.two   { top: 28%;  right: -16%; }
+      .float-badge.three { bottom: 8%; left: -8%; }
+      .float-badge.four  { bottom: 28%; right: -4%; }
 
       /* === HORIZONTAL SCROLL CAROUSEL (mobile, pricing only — testimonials already scroll on all sizes) === */
       .pricing-grid {
@@ -1791,8 +1814,8 @@
       filter: drop-shadow(0 24px 40px rgba(27, 43, 77, 0.12));
     }
     body.coastal .hero-dogs {
-      filter: brightness(0) saturate(100%) invert(81%) sepia(48%) saturate(471%) hue-rotate(347deg) brightness(101%) contrast(94%) drop-shadow(0 24px 40px rgba(0, 0, 0, 0.35));
-      opacity: 0.96;
+      /* Color swap is via src swap in JS — only the shadow changes here */
+      filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.35));
     }
     .dog-tail {
       transform-origin: 178px 305px;
@@ -3113,6 +3136,14 @@
   </footer>
 
   <script>
+    // Always start at top of page on load / refresh
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.addEventListener('load', () => window.scrollTo(0, 0));
+    // Run immediately too in case page is cached
+    window.scrollTo(0, 0);
+
     // Nav scroll effect
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
@@ -3385,12 +3416,25 @@
     });
 
     // Coastal mode toggle (Sunshine ↔ Coastal)
+    // Logo color swap is done via src swap (NOT CSS filter) for clean mobile Safari rendering
+    const LOGO_NAVY = 'assets/logo.png';
+    const LOGO_GOLD = 'assets/logo-gold.png';
+    function swapLogoSources(isCoastal) {
+      const target = isCoastal ? LOGO_GOLD : LOGO_NAVY;
+      document.querySelectorAll('.logo-link img, .footer-brand img, img.hero-dogs').forEach(img => {
+        if (!img.src.endsWith(target.split('/').pop())) img.src = target;
+      });
+    }
+
     const modeToggle = document.getElementById('modeToggle');
     const savedMode = localStorage.getItem('yc-mode');
     if (savedMode === 'coastal') {
       document.body.classList.add('coastal');
       modeToggle.setAttribute('title', 'Switch to Sunshine mode');
       document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0B2545');
+      swapLogoSources(true);
+    } else {
+      swapLogoSources(false);
     }
     modeToggle.addEventListener('click', () => {
       document.body.classList.toggle('coastal');
@@ -3398,6 +3442,7 @@
       localStorage.setItem('yc-mode', isCoastal ? 'coastal' : 'sunshine');
       modeToggle.setAttribute('title', isCoastal ? 'Switch to Sunshine mode' : 'Switch to Coastal mode');
       document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isCoastal ? '#0B2545' : '#FAF6EE');
+      swapLogoSources(isCoastal);
     });
 
     // Subtle parallax on hero decor
