@@ -16,6 +16,32 @@ const ADDON_LABEL      = { deodorize: 'Turf Deodorize' };
 // Per-visit extra-dog surcharge ($/visit per extra dog beyond 2)
 const EXTRA_DOG_PER_VISIT = 4;
 
+// ===========================================================================
+// LAUNCH BUFFER — no first visit (and no charge) within this many days of
+// signup. Lets Stark batch new members + prepare. Easy to lower to 0 later.
+// ===========================================================================
+const MIN_LEAD_DAYS = 10;
+
+// Compute the actual first-visit date based on the customer's chosen day-of-week,
+// the launch buffer, and "today". Used to set Stripe's trial_period_days so the
+// first charge lands exactly on (or 1 day before) the first visit.
+const DAY_INDEX = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 };
+function daysUntilFirstVisit(dayKey) {
+  const target = DAY_INDEX[(dayKey || '').toLowerCase()];
+  if (target === undefined) return MIN_LEAD_DAYS;
+
+  // Earliest possible date is today + MIN_LEAD_DAYS
+  const earliest = new Date();
+  earliest.setHours(0, 0, 0, 0);
+  earliest.setDate(earliest.getDate() + MIN_LEAD_DAYS);
+
+  // From there, walk forward to the next occurrence of the chosen day-of-week
+  const earliestDow = earliest.getDay();
+  const offset = (target - earliestDow + 7) % 7;
+
+  return MIN_LEAD_DAYS + offset;
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -136,6 +162,16 @@ module.exports = async (req, res) => {
       .map((d, i) => `${i + 1}. ${d.name || 'unnamed'} (${d.size || '?'}, ${d.breed || 'breed n/a'})`)
       .join(' | ');
 
+    // === COMPUTE FIRST-VISIT DATE + TRIAL PERIOD ===
+    // The trial period ends on the day BEFORE the first visit, so Stripe charges
+    // exactly when service starts. (e.g., signs up Fri picks Tue → 11-day trial →
+    // first charge Mon evening → first visit Tue morning.)
+    const leadDays = daysUntilFirstVisit(day);
+    const firstVisitDate = new Date();
+    firstVisitDate.setHours(0, 0, 0, 0);
+    firstVisitDate.setDate(firstVisitDate.getDate() + leadDays);
+    const firstVisitISO = firstVisitDate.toISOString().slice(0, 10);
+
     const metadata = {
       firstName,
       lastName,
@@ -151,6 +187,7 @@ module.exports = async (req, res) => {
       preferredTime: time,
       plan,
       addons: addons.join(','),
+      firstVisitDate: firstVisitISO,
       submittedAt: new Date().toISOString()
     };
 
@@ -169,7 +206,8 @@ module.exports = async (req, res) => {
       success_url: `${origin}/membership.html?status=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${origin}/membership.html?status=canceled&plan=${encodeURIComponent(plan)}`,
       subscription_data: {
-        description: `${PLAN_LABEL[plan]} membership · ${(firstName + ' ' + lastName).trim()}`,
+        description: `${PLAN_LABEL[plan]} membership · ${(firstName + ' ' + lastName).trim()} · first visit ${firstVisitISO}`,
+        trial_period_days: leadDays,
         metadata
       },
       metadata

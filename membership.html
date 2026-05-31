@@ -491,6 +491,31 @@
       border-color: rgba(245,228,179,0.18);
       color: rgba(245,228,179,0.7);
     }
+
+    /* First-visit banner that appears once a day is picked */
+    .first-visit-banner {
+      margin-top: 22px;
+      padding: 16px 18px;
+      background: linear-gradient(135deg, rgba(45,106,62,0.08) 0%, rgba(229,176,72,0.08) 100%);
+      border: 1px solid rgba(45,106,62,0.18);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .fvb-icon { font-size: 26px; line-height: 1; flex: none; }
+    .fvb-body { flex: 1; }
+    .fvb-line { font-size: 15px; color: var(--navy); }
+    .fvb-line strong { font-weight: 700; }
+    .fvb-line span { color: var(--green-deep); font-weight: 700; }
+    .fvb-sub { font-size: 13px; color: var(--navy-soft); margin-top: 4px; line-height: 1.5; }
+    body.coastal .first-visit-banner {
+      background: linear-gradient(135deg, rgba(245,228,179,0.08), rgba(74,142,92,0.08));
+      border-color: rgba(245,228,179,0.25);
+    }
+    body.coastal .fvb-line { color: var(--cream); }
+    body.coastal .fvb-line span { color: var(--gold); }
+    body.coastal .fvb-sub { color: rgba(245,228,179,0.65); }
     .option-card {
       padding: 20px 22px;
       border: 2px solid rgba(27, 43, 77, 0.1);
@@ -1520,6 +1545,15 @@
             <span class="legend-item"><span class="legend-dot full"></span>Booked</span>
             <span class="legend-item"><span class="legend-dot selected"></span>Your pick</span>
           </div>
+
+          <!-- First-visit banner -->
+          <div class="first-visit-banner" id="firstVisitBanner">
+            <div class="fvb-icon">🌱</div>
+            <div class="fvb-body">
+              <div class="fvb-line"><strong>Your first visit:</strong> <span id="firstVisitDate">—</span></div>
+              <div class="fvb-sub">Pre-launch period — you won't be charged until your first visit. Lock in your slot today.</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1578,6 +1612,8 @@
           <div class="summary-card-head"><h3>Schedule</h3><button class="summary-edit" type="button" data-edit="8">Edit</button></div>
           <div class="summary-row"><span class="label">Day</span><span class="value" id="reviewDay">—</span></div>
           <div class="summary-row"><span class="label">Time</span><span class="value" id="reviewTime">—</span></div>
+          <div class="summary-row"><span class="label">First visit</span><span class="value" id="reviewFirstVisit">—</span></div>
+          <div class="summary-row"><span class="label">First charge</span><span class="value" id="reviewFirstCharge">—</span></div>
         </div>
       </div>
     </div>
@@ -2167,6 +2203,25 @@
       }
     }
 
+    // 10-day pre-launch buffer — first visit must be at least this many days out
+    const MIN_LEAD_DAYS = 10;
+    const DAY_INDEX = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 };
+    function computeFirstVisitDate(dayKey) {
+      const target = DAY_INDEX[dayKey];
+      if (target === undefined) return null;
+      const earliest = new Date();
+      earliest.setHours(0, 0, 0, 0);
+      earliest.setDate(earliest.getDate() + MIN_LEAD_DAYS);
+      const offset = (target - earliest.getDay() + 7) % 7;
+      const visitDate = new Date(earliest);
+      visitDate.setDate(earliest.getDate() + offset);
+      return visitDate;
+    }
+    function fmtFirstVisit(d) {
+      if (!d) return '—';
+      return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    }
+
     // Day pill clicks
     document.querySelectorAll('#dayOptions .day-pill').forEach(pill => {
       pill.addEventListener('click', async () => {
@@ -2176,6 +2231,11 @@
         state.time = ''; // reset time when day changes
         document.getElementById('pickDayPrompt').style.display = 'none';
         document.getElementById('timeSlotSection').style.display = 'block';
+        // Show the computed first-visit date
+        const visitDate = computeFirstVisitDate(state.day);
+        state.firstVisitDate = visitDate ? visitDate.toISOString().slice(0,10) : '';
+        const fvEl = document.getElementById('firstVisitDate');
+        if (fvEl) fvEl.textContent = fmtFirstVisit(visitDate);
         await fetchAvailability();
         renderTimeSlots(state.day);
       });
@@ -2221,6 +2281,11 @@
       const dayMap = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' };
       document.getElementById('reviewDay').textContent = dayMap[state.day] || '—';
       document.getElementById('reviewTime').textContent = state.time ? fmtSlot(state.time) : '—';
+      const fvDate = computeFirstVisitDate(state.day);
+      document.getElementById('reviewFirstVisit').textContent = fmtFirstVisit(fvDate);
+      document.getElementById('reviewFirstCharge').textContent = fvDate
+        ? fvDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) + ' (day of first visit)'
+        : '—';
       document.getElementById('reviewDogsList').innerHTML = state.dogs.map((d, i) =>
         `<div class="summary-row"><span class="label">${d.name || 'Dog ' + (i + 1)}</span><span class="value">${d.size ? 'Size ' + d.size : ''}${d.breed ? ' · ' + d.breed : ''}</span></div>`
       ).join('');
