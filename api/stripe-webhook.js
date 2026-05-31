@@ -107,6 +107,7 @@ async function handleNewSubscription(subscription) {
 
       <h2 style="font-size:14px;letter-spacing:0.1em;text-transform:uppercase;color:#5A6580;margin:24px 0 12px;">Schedule</h2>
       <div style="font-size:15px;"><strong>${escape(formatDay(meta.preferredDay))}</strong> · ${escape(formatTime(meta.preferredTime))}</div>
+      ${meta.firstVisitDate ? `<div style="margin-top:10px;padding:10px 14px;background:#E8F1E4;border-radius:8px;font-size:14px;"><strong style="color:#2D6A3E;">First visit:</strong> ${escape(formatFirstVisit(meta.firstVisitDate))} · <span style="color:#5A6580;">no charge until then (Stripe trial)</span></div>` : ''}
 
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:32px;width:100%;">
         <tr><td align="center">
@@ -181,4 +182,15 @@ function formatTime(t) {
   const period = h >= 12 ? 'PM' : 'AM';
   const hh = h % 12 === 0 ? 12 : h % 12;
   return hh + ':' + String(m).padStart(2,'0') + ' ' + period;
+}
+
+function formatFirstVisit(iso) {
+  if (!iso) return '';
+  // Parse "YYYY-MM-DD" without timezone shenanigans
+  const [y, mo, d] = iso.split('-').map(Number);
+  if (!y || !mo || !d) return iso;
+  const date = new Date(Date.UTC(y, mo - 1, d));
+  return date.toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC'
+  });
 }
